@@ -2,12 +2,15 @@ import Scene from "./Scene"
 import Engine from "./Engine"
 import MainMenuScene from "./MainMenuScene"
 import GameContext from "./GameContext"
+import Enemigo from "./Enemigo"
 
 class PlayingScene extends Scene {
 
     private paused = false
     private direccion = 1;
     private coordX = 0;
+    private enemigos = [new Enemigo()];
+    private ticks = 0;
 
     private currentOption: number = 0
     private options = ["Reanudar juego","Reiniciar juego","Menú principal","Ajustes"]
@@ -20,10 +23,21 @@ class PlayingScene extends Scene {
         const width = context.canvas.width
         context.save();
         context.beginPath();
+        context.fillStyle = "black";
+        context.fillRect(0, height/2 - 26, width,1)
+        context.fillRect(0, height/2 + 26, width,1)
+        context.closePath();
+        context.restore();
+        context.save();
+        context.beginPath();
         context.fillStyle = "red";
         context.fillRect(this.coordX, height/2 - 25, 50,50)
         context.closePath();
         context.restore();
+
+        for(let x = 0; x < this.enemigos.length; x++){
+            this.enemigos[x].render();
+        }
 
 
 
@@ -73,6 +87,17 @@ class PlayingScene extends Scene {
         const context = GameContext.context;
         const width = context.canvas.width;
         if(!this.paused){
+            let rand = Math.ceil(Math.random()*800) + 200;
+            if(this.ticks == rand){
+                this.enemigos.push(new Enemigo());
+                this.ticks = 0;
+            }
+            this.ticks++;
+
+            for(let x = 0; x < this.enemigos.length; x++){
+                this.enemigos[x].update();
+            }
+
             if(this.direccion == 1){
                 if(this.coordX + 10 > width - 50){
                     this.direccion = -1;
@@ -103,12 +128,17 @@ class PlayingScene extends Scene {
     
     public keyDownHandler = (event: KeyboardEvent, engine: Engine) => {
         const { key } = event;
-
-        if(this.paused){
-            this.paused = false;
+        if(event.key == "p"){
+            if(this.paused){
+                this.paused = false;
+            }
+            else{
+                this.paused = true;
+            }
         }
-        else{
-            this.paused = true;
+
+        if(event.key =="a"){
+            this.enemigos.push(new Enemigo());
         }
 
          if(event.key === "Escape"){
