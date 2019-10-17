@@ -26,8 +26,17 @@ class PlayingScene extends Scene {
         context.restore();
 
 
+
         if(this.paused){
 
+        context.save()
+        context.beginPath()
+        context.globalAlpha = .5
+        context.fillStyle = "black"
+        context.fillRect(0,0,width,height);
+        context.closePath()
+        context.restore()
+        
         context.save()
         context.beginPath()
         context.textAlign = "center"
