@@ -2,14 +2,12 @@ import Scene from "./Scene"
 import GameContext from "./GameContext"
 import Engine from "./Engine"
 import PlayingScene from "./PlayingScene"
-import VictoryScene from "./VictoryScene"
-import GameOverScene from "./GameOverScene"
 
 
-class MainMenuScene extends Scene {
+class VictoryScene extends Scene {
 
     private currentOption: number = 0
-    private options = ["Comenzar juego","Ajustes"]
+    private options = ["Reiniciar","Menú Principal"]
 
     public enter = () => {}
     public render = () => {
@@ -60,10 +58,7 @@ class MainMenuScene extends Scene {
                 break;
             case "Enter":
                 if(this.currentOption === 0){
-                    engine.setCurrentScene(new PlayingScene());
-                }
-                if(this.currentOption === 1){
-                    engine.setCurrentScene(new GameOverScene());
+            engine.setCurrentScene(new PlayingScene());
                 }
                 
                 break;
@@ -76,4 +71,4 @@ class MainMenuScene extends Scene {
 
 }
 
-export default MainMenuScene;
+export default VictoryScene;

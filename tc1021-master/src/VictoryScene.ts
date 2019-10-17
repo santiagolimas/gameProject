@@ -43,6 +43,8 @@ class VictoryScene extends Scene {
         context.restore()
 
     }
+
+    
     public update = () => {}
     public keyUpHandler = (event: KeyboardEvent) => {}
     public keyDownHandler = (event: KeyboardEvent, engine: Engine) => {

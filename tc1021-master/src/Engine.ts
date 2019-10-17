@@ -4,6 +4,8 @@ import Scene from "./Scene"
 import PlayingScene from "./PlayingScene";
 import VictoryScene from "./VictoryScene";
 import MainMenuScene from "./MainMenuScene";
+import GameOverScene from "./GameOverScene"
+
 
 class Engine {
   private currentScene: Scene = null;
