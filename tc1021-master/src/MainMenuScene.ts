@@ -4,12 +4,13 @@ import Engine from "./Engine"
 import PlayingScene from "./PlayingScene"
 import VictoryScene from "./VictoryScene"
 import GameOverScene from "./GameOverScene"
-
+import selection from "./assets/Menu Selection Click.wav"
 
 class MainMenuScene extends Scene {
 
     private currentOption: number = 0
     private options = ["Comenzar juego","Ajustes"]
+    private selectionSound = new Audio(selection);
 
     public enter = () => {}
     public render = () => {
@@ -53,9 +54,11 @@ class MainMenuScene extends Scene {
 
         switch(key){
             case "ArrowUp":
+                this.selectionSound.play();
                 this.currentOption = (this.currentOption - 1 + this.options.length) % this.options.length;
                 break;
             case "ArrowDown":
+                this.selectionSound.play();
                 this.currentOption = (this.currentOption + 1) % this.options.length;
                 break;
             case "Enter":

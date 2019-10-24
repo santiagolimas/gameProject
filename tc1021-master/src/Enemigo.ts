@@ -1,4 +1,5 @@
 import GameContext from "./GameContext"
+import EnemigoWalk from "./assets/mon2_sprite_base.png"
 
 class Enemigo{
     private vidaTotal = 1000;
@@ -7,6 +8,11 @@ class Enemigo{
     private coordY = 0;
     private widthEnemy = 80;
     private heightEnemy = 80;
+    private frame = 0;
+    private sprite = new Image();
+    private counter = 0;
+    private walkingframes = [20,90,150,210]
+
 
     position = [this.coordX,this.coordY];
     measurementsEnemy = [this.widthEnemy,this.heightEnemy];
@@ -24,10 +30,21 @@ class Enemigo{
 
         this.coordX = width + 50;
         this.coordY = height / 2 - 25;
+        this.frame = 0;
+        this.sprite.src = EnemigoWalk;
+
         
     }
 
     public update(){
+        if(this.counter == 30){
+            this.frame++;
+            if(this.frame > 3){
+                this.frame = 0;
+            }
+            this.counter = 0;
+            }
+        this.counter++;
         this.coordX -= .5;
         this.position[0] = this.coordX;
         this.position[1] = this.coordY;
