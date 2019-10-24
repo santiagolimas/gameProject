@@ -29,7 +29,7 @@ class Enemigo{
         this.vidaRestante = 1000;
 
         this.coordX = width + 50;
-        this.coordY = height / 2 - 25;
+        this.coordY = (height / 2) - 25;
         this.frame = 0;
         this.sprite.src = EnemigoWalk;
 
@@ -79,6 +79,10 @@ class Enemigo{
     public getMeasurementsEnemy = () => {
         return this.measurementsEnemy;
     };
+
+    public getHealth = () =>{
+        return this.vidaRestante;
+    }
 
 }
 

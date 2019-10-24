@@ -3,6 +3,7 @@ import Engine from "./Engine"
 import MainMenuScene from "./MainMenuScene"
 import GameContext from "./GameContext"
 import Enemigo from "./Enemigo"
+import selection from "./assets/Menu Selection Click.wav"
 
 class PlayingScene extends Scene {
 
@@ -25,6 +26,7 @@ class PlayingScene extends Scene {
 
     private currentOption: number = 0
     private options = ["Reanudar juego","Reiniciar juego","Menú principal","Ajustes"]
+    private selectionSound = new Audio(selection);
 
     public render = () => {
 
@@ -167,6 +169,32 @@ class PlayingScene extends Scene {
          if(event.key === "Escape"){
             engine.setCurrentScene(new MainMenuScene());
          }
+
+         if(this.paused){
+            switch(event.key){
+                case "ArrowUp":
+                    this.selectionSound.play();
+                    this.currentOption = (this.currentOption - 1 + this.options.length) % this.options.length;
+                    break;
+                case "ArrowDown":
+                    this.selectionSound.play();
+                    this.currentOption = (this.currentOption + 1) % this.options.length;
+                    break;
+                case "Enter":
+                    switch(this.currentOption){
+                        case 0:
+                            this.paused = false;
+                            break;
+                        case 1:
+                                engine.setCurrentScene(new PlayingScene());
+                            break;
+                        case 2:
+                                engine.setCurrentScene(new MainMenuScene());
+                        break;
+                    }
+                    break;
+            }
+         }
         
     }
 
@@ -199,7 +227,7 @@ class PlayingScene extends Scene {
 
 
     public handleMouseMoveEventEnemigo = (offsetX,offsetY) => {
-
+        const context = GameContext.context;
        
 
         for(let x = 0; x < this.enemigos.length; x++){
@@ -207,13 +235,14 @@ class PlayingScene extends Scene {
             let [enemyX,enemyY] = this.enemigos[x].getEnemyCoordinates();
             let [enemyWidth,enemyHeight] = this.enemigos[x].getMeasurementsEnemy();
 
-            if(offsetX >= this.positionButton[0] && ( offsetX <= (this.positionButton[0] + this.widthButton) )
-            && offsetY >= this.positionButton[1] && ( offsetY <= (this.positionButton[1] + this.heightButton) ) 
+            if(offsetX >= enemyX && ( offsetX <= (enemyX + enemyWidth) )
+            && offsetY >= enemyY && ( offsetY <= (enemyY+ enemyHeight) ) 
             ){
-      
-              console.log("El mouse se esta moviendo dentro del enemigo")
-      
-      
+                context.save()
+                context.beginPath()
+                context.fillRect(enemyX, enemyY + enemyHeight, this.enemigos[x].getHealth(), 10);
+                context.closePath();
+                context.restore();
             }
 
 
