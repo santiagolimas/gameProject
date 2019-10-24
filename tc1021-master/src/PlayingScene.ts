@@ -6,6 +6,17 @@ import Enemigo from "./Enemigo"
 
 class PlayingScene extends Scene {
 
+    //Button characteristics
+    private widthButton = 150;
+    private heightButton = 80;
+    private positionButton = [50,20];
+    private buttonColor = "darkblue"
+    private buttonPressed = false
+
+    //Enemy characteristics
+
+
+
     private paused = false
     private direccion = 1;
     private coordX = 0;
@@ -35,11 +46,21 @@ class PlayingScene extends Scene {
         context.closePath();
         context.restore();
 
+
+        //Button
+        let [x, y] = this.positionButton;
+        context.save();
+        context.beginPath();
+        context.fillStyle = this.buttonColor;
+        context.fillRect(x, y, this.widthButton, this.heightButton);
+        context.closePath();
+        context.restore();
+
+
+
         for(let x = 0; x < this.enemigos.length; x++){
             this.enemigos[x].render();
         }
-
-
 
         if(this.paused){
 
@@ -87,8 +108,8 @@ class PlayingScene extends Scene {
         const context = GameContext.context;
         const width = context.canvas.width;
         if(!this.paused){
-            let rand = Math.ceil(Math.random()*800) + 200;
-            if(this.ticks == rand){
+            let rand = Math.ceil(Math.random()*600) + 200;
+            if(this.ticks == rand || this.ticks > 600){
                 this.enemigos.push(new Enemigo());
                 this.ticks = 0;
             }
@@ -117,6 +138,8 @@ class PlayingScene extends Scene {
                 }
             }
         }
+
+        
     }
 
     public enter = () => {
@@ -146,6 +169,76 @@ class PlayingScene extends Scene {
          }
         
     }
+
+    public handleMouseUpEventButton = () => {
+      
+      }
+    
+    public handleMouseDownEventButton = () => {
+        this.buttonPressed = true
+        console.log("Valor de pressed es : " + this.buttonPressed)     
+    }
+  
+    public handleMouseMoveEventButton = (offsetX,offsetY) => {
+
+    if(offsetX >= this.positionButton[0] && ( offsetX <= (this.positionButton[0] + this.widthButton) )
+      && offsetY >= this.positionButton[1] && ( offsetY <= (this.positionButton[1] + this.heightButton) ) 
+      ){
+
+        console.log("El mouse se esta moviendo dentro del boton")
+
+        if(this.buttonPressed){
+            this.buttonColor = "yellow"
+            console.log("cambio de color")
+            
+        }
+
+      }
+       
+    }
+
+
+    public handleMouseMoveEventEnemigo = (offsetX,offsetY) => {
+
+       
+
+        for(let x = 0; x < this.enemigos.length; x++){
+            
+            let [enemyX,enemyY] = this.enemigos[x].getEnemyCoordinates();
+            let [enemyWidth,enemyHeight] = this.enemigos[x].getMeasurementsEnemy();
+
+            if(offsetX >= this.positionButton[0] && ( offsetX <= (this.positionButton[0] + this.widthButton) )
+            && offsetY >= this.positionButton[1] && ( offsetY <= (this.positionButton[1] + this.heightButton) ) 
+            ){
+      
+              console.log("El mouse se esta moviendo dentro del enemigo")
+      
+      
+            }
+
+
+
+        }
+           
+        }
+
+
+    public mouseDownListener = (event: MouseEvent) => {
+        this.handleMouseDownEventButton()
+    }
+    
+    public mouseMoveListener = (event: MouseEvent) => {
+        this.handleMouseMoveEventButton(event.offsetX,event.offsetY)    
+        this.handleMouseMoveEventEnemigo(event.offsetX,event.offsetY)    
+
+    }
+    
+    public mouseUpListener  = (event: MouseEvent) => {
+        this.handleMouseUpEventButton()
+    }
+
+
+
 
 
 }

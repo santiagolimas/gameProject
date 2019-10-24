@@ -22,6 +22,7 @@ class Engine {
     requestAnimationFrame(this.tick);
   };
 
+
   public keydownHandler = (event: KeyboardEvent) => {
     // const { key } = event;
     // this.character.keydownHandler(key);
