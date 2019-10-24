@@ -6,8 +6,8 @@ class Enemigo{
     private vidaRestante = 1000;
     private coordX = 1000;
     private coordY = 0;
-    private widthEnemy = 80;
-    private heightEnemy = 80;
+    private widthEnemy = 50;
+    private heightEnemy = 50;
     private frame = 0;
     private sprite = new Image();
     private counter = 0;
@@ -57,7 +57,9 @@ class Enemigo{
         const width = context.canvas.width
         context.save();
         context.beginPath();
-        context.fillRect(this.coordX, this.coordY, this.widthEnemy, this.heightEnemy)
+        context.translate(this.coordX + 50,height/2 - 25);
+        context.scale(-1,1);
+        context.drawImage(this.sprite,this.walkingframes[this.frame], 70,20, 70,0,0, 50, 50)
         context.closePath();
         context.restore();
 
