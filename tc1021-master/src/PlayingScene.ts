@@ -4,7 +4,7 @@ import MainMenuScene from "./MainMenuScene"
 import GameContext from "./GameContext"
 import Enemigo from "./Enemigo"
 import selection from "./assets/Menu Selection Click.wav"
-
+import CatWarlock from "./CatWarlock"
 class PlayingScene extends Scene {
 
     //Button characteristics
@@ -13,7 +13,6 @@ class PlayingScene extends Scene {
     private positionButton = [50,20];
     private buttonColor = "darkblue"
     private buttonPressed = false
-
     //Enemy characteristics
 
 
@@ -23,6 +22,7 @@ class PlayingScene extends Scene {
     private coordX = 0;
     private enemigos = [new Enemigo()];
     private ticks = 0;
+    private catWarlock = new CatWarlock(0,0);
 
     private currentOption: number = 0
     private options = ["Reanudar juego","Reiniciar juego","Menú principal","Ajustes"]
@@ -63,6 +63,8 @@ class PlayingScene extends Scene {
         for(let x = 0; x < this.enemigos.length; x++){
             this.enemigos[x].render();
         }
+
+        this.catWarlock.render();
 
         if(this.paused){
 
@@ -109,6 +111,7 @@ class PlayingScene extends Scene {
     public update = () => {
         const context = GameContext.context;
         const width = context.canvas.width;
+        this.catWarlock.update();
         if(!this.paused){
             let rand = Math.ceil(Math.random()*600) + 200;
             if(this.ticks == rand || this.ticks > 600){
@@ -145,6 +148,10 @@ class PlayingScene extends Scene {
     }
 
     public enter = () => {
+        const context = GameContext.context;
+        const width = context.canvas.width;
+        const height = context.canvas.height;
+        this.catWarlock = new CatWarlock(0,height/2 - 25);
     }
 
     public keyUpHandler = (event: KeyboardEvent) => {
