@@ -18,7 +18,6 @@ class PlayingScene extends Scene {
     private buttonPressed = false
     //Enemy characteristics
 
-
     private paused = false
     private direccion = 1;
     private coordX = 0;
@@ -30,6 +29,32 @@ class PlayingScene extends Scene {
     private currentOption: number = 0
     private options = ["Reanudar juego","Reiniciar juego","Menú principal","Ajustes"]
     private selectionSound = new Audio(selection);
+
+
+     //todo Variables para botones de interfaz de pausa
+     private widthCanvas = GameContext.context.canvas.width;
+     private heightCanvas = GameContext.context.canvas.height;
+
+
+    //  context.fillRect(width/2 - 200, height/2 - 200 + i * 110 - 55, 400, 70);
+    private mousePressed = false
+
+     private widthButton1 = 400;
+     private heightButton1 = 70;
+     private positionButton1 = [this.widthCanvas/2 - 200, this.heightCanvas/2 - 255];
+
+     private widthButton2 = 400;
+     private heightButton2 = 70;
+     private positionButton2 = [this.widthCanvas/2 - 200, this.heightCanvas/2 + (1*110) - 255];
+     
+     private widthButton3 = 400;
+     private heightButton3 = 70;
+     private positionButton3 = [this.widthCanvas/2 - 200, this.heightCanvas/2 + (2*110) - 255];
+
+     private widthButton4 = 400;
+     private heightButton4 = 70;
+     private positionButton4 = [this.widthCanvas/2 - 200, this.heightCanvas/2 + (3*110) - 255];
+
 
     public render = () => {
 
@@ -46,6 +71,7 @@ class PlayingScene extends Scene {
         context.restore();
 
 
+    
         //Button
         let [x, y] = this.positionButton;
         context.save();
@@ -64,6 +90,9 @@ class PlayingScene extends Scene {
         this.catWarlock.render();
         this.bullet.render();
 
+       
+
+        // TODO: EMPIEZA INTERFAZ DE PAUSA
         if(this.paused){
 
         context.save()
@@ -102,6 +131,9 @@ class PlayingScene extends Scene {
         context.restore()
 
         }
+        // TODO TERMINA INTERFAZ DE PAUSA
+
+
         
         
     }
@@ -161,7 +193,7 @@ class PlayingScene extends Scene {
     
     public keyDownHandler = (event: KeyboardEvent, engine: Engine) => {
         const { key } = event;
-        if(event.key == "p"){
+        if(event.key == "p" || event.key == "P"){
             if(this.paused){
                 this.paused = false;
             }
@@ -206,34 +238,6 @@ class PlayingScene extends Scene {
         
     }
 
-    // public handleMouseUpEventButton = () => {
-    //     this.buttonPressed = false
-    // }
-    
-    // public handleMouseDownEventButton = () => {
-    //     this.buttonPressed = true
-    //     console.log("Valor de pressed es : " + this.buttonPressed)     
-    // }
-  
-    // public handleMouseMoveEventButton = (offsetX,offsetY) => {
-
-    // if(offsetX >= this.positionButton[0] && ( offsetX <= (this.positionButton[0] + this.widthButton) )
-    //   && offsetY >= this.positionButton[1] && ( offsetY <= (this.positionButton[1] + this.heightButton) ) 
-    //   ){
-
-    //     console.log("El mouse se esta moviendo dentro del boton")
-
-    //     if(this.buttonPressed){
-    //         this.buttonColor = "yellow"
-    //         console.log("cambio de color")
-            
-    //     }
-
-    //   }
-       
-    // }
-
-
     public handleMouseMoveEventEnemigo = (offsetX,offsetY) => {
         const context = GameContext.context;
        
@@ -259,24 +263,78 @@ class PlayingScene extends Scene {
            
         }
 
-     public mouseMoveHandler = (event: MouseEvent) => {}
-    public  mouseUpHandler = (event: MouseEvent) => {}
-    public mouseDownHandler = (event: MouseEvent,engine: Engine) => {}
+    public mouseMoveHandler = (event) => {
+   
+    if (this.paused){ 
+        if(event.offsetX >= this.positionButton1[0] && ( event.offsetX <= (this.positionButton1[0] + this.widthButton1) )
+              && event.offsetY >= this.positionButton1[1] && ( event.offsetY <= (this.positionButton1[1] + this.heightButton1) ) 
+        ){
+                    this.currentOption = 0;
+                    console.log("MOVIENDOME EN B1")
 
-    // public mouseDownListener = (event: MouseEvent) => {
-    //     this.handleMouseDownEventButton()
-    // }
-    
-    // public mouseMoveListener = (event: MouseEvent) => {
-    //     this.handleMouseMoveEventButton(event.offsetX,event.offsetY)    
-    //     this.handleMouseMoveEventEnemigo(event.offsetX,event.offsetY)    
+        } else if(event.offsetX >= this.positionButton2[0] && ( event.offsetX <= (this.positionButton2[0] + this.widthButton2) )
+            && event.offsetY >= this.positionButton2[1] && ( event.offsetY <= (this.positionButton2[1] + this.heightButton2) ) 
+            ){
+                     this.currentOption = 1;
+                     console.log("MOVIENDOME EN B2")
 
-    // }
-    
-    // public mouseUpListener  = (event: MouseEvent) => {
-    //     this.handleMouseUpEventButton()
-    // }
+        }  else if(event.offsetX >= this.positionButton3[0] && ( event.offsetX <= (this.positionButton3[0] + this.widthButton3) )
+        && event.offsetY >= this.positionButton3[1] && ( event.offsetY <= (this.positionButton3[1] + this.heightButton3) ) 
+        ){
+              this.currentOption = 2;
+              console.log("MOVIENDOME EN B3")
 
+        } else if(event.offsetX >= this.positionButton4[0] && ( event.offsetX <= (this.positionButton4[0] + this.widthButton4) )
+      && event.offsetY >= this.positionButton4[1] && ( event.offsetY <= (this.positionButton4[1] + this.heightButton4) ) 
+      ){
+               this.currentOption = 3;
+               console.log("MOVIENDOME EN B4")
+    }  
+            
+    }
+
+    }
+
+    public  mouseUpHandler = (event: MouseEvent) => {
+        this.mousePressed = false;
+    }
+
+    public mouseDownHandler = (event: MouseEvent,engine: Engine) => {
+
+
+        if(this.paused){
+
+        if(event.offsetX >= this.positionButton1[0] && ( event.offsetX <= (this.positionButton1[0] + this.widthButton1) )
+            && event.offsetY >= this.positionButton1[1] && ( event.offsetY <= (this.positionButton1[1] + this.heightButton1) ) 
+            ){
+                this.paused = false;
+        } 
+        else if(event.offsetX >= this.positionButton2[0] && ( event.offsetX <= (this.positionButton2[0] + this.widthButton2) )
+        && event.offsetY >= this.positionButton2[1] && ( event.offsetY <= (this.positionButton2[1] + this.heightButton2) ) 
+        ){
+            engine.setCurrentScene(new PlayingScene())
+
+
+         } else if(event.offsetX >= this.positionButton3[0] && ( event.offsetX <= (this.positionButton3[0] + this.widthButton3) )
+         && event.offsetY >= this.positionButton3[1] && ( event.offsetY <= (this.positionButton3[1] + this.heightButton3) ) 
+         ){
+            engine.setCurrentScene(new MainMenuScene())
+
+          } else if(event.offsetX >= this.positionButton4[0] && ( event.offsetX <= (this.positionButton4[0] + this.widthButton4) )
+          && event.offsetY >= this.positionButton4[1] && ( event.offsetY <= (this.positionButton4[1] + this.heightButton4) ) 
+          ){
+                // engine.setCurrentScene(new PlayingScene())
+
+           } else{
+            this.mousePressed = false;
+           }
+
+
+
+        }
+    }
+
+  
 
 
 
