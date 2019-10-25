@@ -1,12 +1,11 @@
 import GameContext from "./GameContext"
-import CatWarlockSprite from "./assets/cat2_base.png"
+import BulletSprite from "./assets/bulllet/energy_effect_base.png"
 import Engine from "./Engine";
 import GameOverScene from "./GameOverScene"
 
-class CatWarlock{
+class Bullet{
+
     
-    private vidaTotal = 1000;
-    private vidaRestante = 1000;
     private coordX = 1000;
     private coordY = 0;
     private width = 50;
@@ -15,22 +14,20 @@ class CatWarlock{
     private stance = 0;
     private sprite = new Image();
     private counter = 0;
-    private idleFrames = [[20,150],[20,275],[83,275],[147,275],[210,275],[275,275],[340,275]];
+    private idleFrames = [[2,98],[35,98],[66,98],[99,98],[133,98],[165,98],[205,98]];
     position = [this.coordX,this.coordY];
-    measurementsCat = [this.width,this.height];
-    private barColor = "green"
+    measurementsBullet = [this.width,this.height];
 
     constructor(coordX, coordY){
         const context = GameContext.context;
         const height = context.canvas.height;
         const width = context.canvas.width
-        this.vidaTotal = 1000;
-        this.vidaRestante = 1000;
+  
         this.coordX = coordX;
         this.coordY = coordY;
         this.frame = 0;
         this.stance = 0;
-        this.sprite.src = CatWarlockSprite;
+        this.sprite.src = BulletSprite;
 
         
     }
@@ -42,7 +39,7 @@ class CatWarlock{
                 this.frame = 0;
             }
             this.counter = 0;
-            }
+        }
         this.counter++;
         this.position[0] = this.coordX;
         this.position[1] = this.coordY;
@@ -55,7 +52,7 @@ class CatWarlock{
         const width = context.canvas.width
         context.save();
         context.beginPath();
-        context.drawImage(this.sprite,this.idleFrames[this.frame][0],this.idleFrames[this.frame][1],20, 35,this.coordX,this.coordY, 50, 50)
+        context.drawImage(this.sprite,this.idleFrames[this.frame][0],this.idleFrames[this.frame][1],28, 33,this.coordX,this.coordY, 50, 50)
         context.closePath();
         context.restore();
 
@@ -68,18 +65,18 @@ class CatWarlock{
         // context.restore();
     }
 
-    public getCatWarlockCoordinates = () => {
+    public getBulletCoordinates = () => {
         return this.position;
     };
 
-    public getMeasurementsCatWarlock = () => {
-        return this.measurementsCat;
+    public getMeasurementsBullet = () => {
+        return this.measurementsBullet;
     };
 
-    public getHealth = () =>{
-        return this.vidaRestante;
-    }
+     
+
+
 
 }
 
-export default CatWarlock;
+export default Bullet;

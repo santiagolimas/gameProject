@@ -35,6 +35,25 @@ class Engine {
     // this.character.keyupHandler(key);
   };
 
+  public mouseDownListener = (event: MouseEvent) => {
+    this.currentScene.mouseDownHandler(event);
+  } 
+
+  public mouseUpListener = (event: MouseEvent) => {
+    this.currentScene.mouseUpHandler(event);
+  }
+
+  public mouseMoveListener = (event: MouseEvent) => {
+    // this.currentScene.mouseMoveHandler(event,this)
+    this.currentScene.mouseMoveHandler(event,this);
+  }
+
+
+
+
+
+
+
   // Limpiar pantalla y dibujar fondo.
   private clearScreen = () => {
     const context = GameContext.context;

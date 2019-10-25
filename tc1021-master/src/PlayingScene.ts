@@ -5,16 +5,18 @@ import GameContext from "./GameContext"
 import Enemigo from "./Enemigo"
 import selection from "./assets/Menu Selection Click.wav"
 import CatWarlock from "./CatWarlock"
+import Bullet from "./Bullet"
+
 class PlayingScene extends Scene {
 
     //Button characteristics
     private widthButton = 150;
     private heightButton = 80;
     private positionButton = [50,20];
-    private buttonColor = "darkblue"
+    private buttonColor = "gray"
+
     private buttonPressed = false
     //Enemy characteristics
-
 
 
     private paused = false
@@ -23,6 +25,7 @@ class PlayingScene extends Scene {
     private enemigos = [new Enemigo()];
     private ticks = 0;
     private catWarlock = new CatWarlock(0,0);
+    private bullet = new Bullet(0,0);
 
     private currentOption: number = 0
     private options = ["Reanudar juego","Reiniciar juego","Menú principal","Ajustes"]
@@ -65,6 +68,7 @@ class PlayingScene extends Scene {
         }
 
         this.catWarlock.render();
+        this.bullet.render();
 
         if(this.paused){
 
@@ -112,6 +116,8 @@ class PlayingScene extends Scene {
         const context = GameContext.context;
         const width = context.canvas.width;
         this.catWarlock.update();
+        this.bullet.update();
+
         if(!this.paused){
             let rand = Math.ceil(Math.random()*600) + 200;
             if(this.ticks == rand || this.ticks > 600){
@@ -152,6 +158,7 @@ class PlayingScene extends Scene {
         const width = context.canvas.width;
         const height = context.canvas.height;
         this.catWarlock = new CatWarlock(0,height/2 - 25);
+        this.bullet = new Bullet(70,height/2-22);
     }
 
     public keyUpHandler = (event: KeyboardEvent) => {
@@ -205,32 +212,32 @@ class PlayingScene extends Scene {
         
     }
 
-    public handleMouseUpEventButton = () => {
-      
-      }
+    // public handleMouseUpEventButton = () => {
+    //     this.buttonPressed = false
+    // }
     
-    public handleMouseDownEventButton = () => {
-        this.buttonPressed = true
-        console.log("Valor de pressed es : " + this.buttonPressed)     
-    }
+    // public handleMouseDownEventButton = () => {
+    //     this.buttonPressed = true
+    //     console.log("Valor de pressed es : " + this.buttonPressed)     
+    // }
   
-    public handleMouseMoveEventButton = (offsetX,offsetY) => {
+    // public handleMouseMoveEventButton = (offsetX,offsetY) => {
 
-    if(offsetX >= this.positionButton[0] && ( offsetX <= (this.positionButton[0] + this.widthButton) )
-      && offsetY >= this.positionButton[1] && ( offsetY <= (this.positionButton[1] + this.heightButton) ) 
-      ){
+    // if(offsetX >= this.positionButton[0] && ( offsetX <= (this.positionButton[0] + this.widthButton) )
+    //   && offsetY >= this.positionButton[1] && ( offsetY <= (this.positionButton[1] + this.heightButton) ) 
+    //   ){
 
-        console.log("El mouse se esta moviendo dentro del boton")
+    //     console.log("El mouse se esta moviendo dentro del boton")
 
-        if(this.buttonPressed){
-            this.buttonColor = "yellow"
-            console.log("cambio de color")
+    //     if(this.buttonPressed){
+    //         this.buttonColor = "yellow"
+    //         console.log("cambio de color")
             
-        }
+    //     }
 
-      }
+    //   }
        
-    }
+    // }
 
 
     public handleMouseMoveEventEnemigo = (offsetX,offsetY) => {
@@ -259,19 +266,19 @@ class PlayingScene extends Scene {
         }
 
 
-    public mouseDownListener = (event: MouseEvent) => {
-        this.handleMouseDownEventButton()
-    }
+    // public mouseDownListener = (event: MouseEvent) => {
+    //     this.handleMouseDownEventButton()
+    // }
     
-    public mouseMoveListener = (event: MouseEvent) => {
-        this.handleMouseMoveEventButton(event.offsetX,event.offsetY)    
-        this.handleMouseMoveEventEnemigo(event.offsetX,event.offsetY)    
+    // public mouseMoveListener = (event: MouseEvent) => {
+    //     this.handleMouseMoveEventButton(event.offsetX,event.offsetY)    
+    //     this.handleMouseMoveEventEnemigo(event.offsetX,event.offsetY)    
 
-    }
+    // }
     
-    public mouseUpListener  = (event: MouseEvent) => {
-        this.handleMouseUpEventButton()
-    }
+    // public mouseUpListener  = (event: MouseEvent) => {
+    //     this.handleMouseUpEventButton()
+    // }
 
 
 
