@@ -2,12 +2,16 @@ import Scene from "./Scene"
 import GameContext from "./GameContext"
 import Engine from "./Engine"
 import PlayingScene from "./PlayingScene"
+import MainMenuScene from "./MainMenuScene"
 
 
 class VictoryScene extends Scene {
 
     private currentOption: number = 0
     private options = ["Reiniciar","Menú Principal"]
+    private mousePressed = false;
+    private buttons = [[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2-60]
+                      ,[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2+150]]
 
     public enter = () => {}
     public render = () => {
@@ -68,6 +72,38 @@ class VictoryScene extends Scene {
 
 
     }
+
+    public mouseMoveHandler = (event: MouseEvent) => {
+        if(event.offsetX >= this.buttons[0][0] && ( event.offsetX <= (this.buttons[0][0] + 400) )
+        && event.offsetY >= this.buttons[0][1] && ( event.offsetY <= (this.buttons[0][1] + 100) ) 
+        ){
+            this.currentOption = 0;
+         }
+        else if(event.offsetX >= this.buttons[1][0] && ( event.offsetX <= (this.buttons[1][0] + 400) )
+        && event.offsetY >= this.buttons[1][1] && ( event.offsetY <= (this.buttons[1][1] + 100) )){
+            this.currentOption = 1;
+        }
+    }
+
+    public  mouseUpHandler = (event: MouseEvent) => {
+        this.mousePressed = false;
+    }
+
+    public mouseDownHandler = (event: MouseEvent,engine: Engine) => {
+        if(event.offsetX >= this.buttons[0][0] && ( event.offsetX <= (this.buttons[0][0] + 400) )
+        && event.offsetY >= this.buttons[0][1] && ( event.offsetY <= (this.buttons[0][1] + 100) )
+        ){
+            engine.setCurrentScene(new PlayingScene())
+         }
+        else if(event.offsetX >= this.buttons[1][0] && ( event.offsetX <= (this.buttons[1][0] + 400) )
+        && event.offsetY >= this.buttons[1][1] && ( event.offsetY <= (this.buttons[1][1] + 100) )){
+            engine.setCurrentScene(new MainMenuScene())
+        }
+        else{
+             this.mousePressed = true;
+         }
+    }
+
 
 
 

@@ -44,12 +44,6 @@ class PlayingScene extends Scene {
         context.fillRect(0, height/2 + 26, width,1)
         context.closePath();
         context.restore();
-        context.save();
-        context.beginPath();
-        context.fillStyle = "red";
-        context.fillRect(this.coordX, height/2 - 25, 50,50)
-        context.closePath();
-        context.restore();
 
 
         //Button
