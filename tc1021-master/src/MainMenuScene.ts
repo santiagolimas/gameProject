@@ -14,10 +14,12 @@ class MainMenuScene extends Scene {
 
     private widthCanvas = GameContext.context.canvas.width;
     private heightCanvas = GameContext.context.canvas.height;
+    private inButton = false;
 
     private widthButton1 = 400;
     private heightButton1 = 100;
     private positionButton1 = [this.widthCanvas/2 - 200, this.heightCanvas/2 - 60 - 100];
+    private transition = false;
 
     private widthButton2 = 400;
     private heightButton2 = 100;
@@ -95,46 +97,36 @@ class MainMenuScene extends Scene {
 
     
 
-    public mouseMoveHandler = (event, engine: Engine) => {
+    public mouseMoveHandler = (event) => {
    
     if(event.offsetX >= this.positionButton1[0] && ( event.offsetX <= (this.positionButton1[0] + this.widthButton1) )
       && event.offsetY >= this.positionButton1[1] && ( event.offsetY <= (this.positionButton1[1] + this.heightButton1) ) 
       ){
+            this.currentOption = 0;
+       } 
 
-        // this.auxFlag = true
-        console.log("El mouse se esta moviendo dentro del boton1")
-        // console.log("El valor de auxFlag: " + this.auxFlag)
-
-        if(this.mousePressed){
-           engine.setCurrentScene(new PlayingScene());
-        }
-
-       } else if(event.offsetX >= this.positionButton2[0] && ( event.offsetX <= (this.positionButton2[0] + this.widthButton2) )
-      && event.offsetY >= this.positionButton2[1] && ( event.offsetY <= (this.positionButton2[1] + this.heightButton2) ) 
-        ){
-        
-        console.log("El mouse se esta moviendo dentro del boton2")
-        console.log("El valor de auxFlag: " + this.auxFlag)
-
-         }
-
-      this.auxFlag = false
+       if(event.offsetX >= this.positionButton2[0] && ( event.offsetX <= (this.positionButton2[0] + this.widthButton2) )
+       && event.offsetY >= this.positionButton2[1] && ( event.offsetY <= (this.positionButton2[1] + this.heightButton2) ) 
+       ){
+             this.currentOption = 1;
+        }  
+    
     }
 
     
     public mouseUpHandler = (event) => {
-        this.mousePressed = false
-        console.log("Valor de mousePressed: " + this.mousePressed)
+        this.mousePressed = false;
     }
 
-    public mouseDownHandler = (event) => {
-        this.mousePressed = true
-
-        // if(this.auxFlag && this.mousePressed){
-        //     engine.setCurrentScene(new PlayingScene());
-        // }
-
-        console.log("Valor de mousePressed: " + this.mousePressed)
+    public mouseDownHandler = (event,engine: Engine) => {
+        if(event.offsetX >= this.positionButton1[0] && ( event.offsetX <= (this.positionButton1[0] + this.widthButton1) )
+        && event.offsetY >= this.positionButton1[1] && ( event.offsetY <= (this.positionButton1[1] + this.heightButton1) ) 
+        ){
+              engine.setCurrentScene(new PlayingScene())
+         } 
+         else{
+             this.mousePressed = false;
+         }
     }
 
 

@@ -20,12 +20,6 @@ canvas.addEventListener("mousedown", engine.mouseDownListener)
 canvas.addEventListener("mousemove", engine.mouseMoveListener)
 canvas.addEventListener("mouseup", engine.mouseUpListener)
 
-
-
-canvas.addEventListener("mousedown", playingscene.mouseDownListener)
-canvas.addEventListener("mousemove",playingscene.mouseMoveListener)
-canvas.addEventListener("mouseup", playingscene.mouseUpListener)
-
 // canvas.addEventListener("mousedown", menuscene.mouseDownListener)
 // canvas.addEventListener("mousemove", menuscene.mouseMoveListener)
 // canvas.addEventListener("mouseup", menuscene.mouseUpListener)

@@ -265,6 +265,9 @@ class PlayingScene extends Scene {
            
         }
 
+     public mouseMoveHandler = (event: MouseEvent) => {}
+    public  mouseUpHandler = (event: MouseEvent) => {}
+    public mouseDownHandler = (event: MouseEvent,engine: Engine) => {}
 
     // public mouseDownListener = (event: MouseEvent) => {
     //     this.handleMouseDownEventButton()

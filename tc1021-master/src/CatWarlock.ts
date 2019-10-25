@@ -36,7 +36,7 @@ class CatWarlock{
     }
 
     public update(){
-        if(this.counter == 30){
+        if(this.counter == 15){
             this.frame++;
             if(this.frame > 6){
                 this.frame = 0;

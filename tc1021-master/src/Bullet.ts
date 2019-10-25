@@ -33,9 +33,9 @@ class Bullet{
     }
 
     public update(){
-        if(this.counter == 30){
+        if(this.counter == 10){
             this.frame++;
-            if(this.frame > 6){
+            if(this.frame > 3){
                 this.frame = 0;
             }
             this.counter = 0;

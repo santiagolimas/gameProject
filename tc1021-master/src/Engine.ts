@@ -36,7 +36,7 @@ class Engine {
   };
 
   public mouseDownListener = (event: MouseEvent) => {
-    this.currentScene.mouseDownHandler(event);
+    this.currentScene.mouseDownHandler(event,this);
   } 
 
   public mouseUpListener = (event: MouseEvent) => {
@@ -45,7 +45,7 @@ class Engine {
 
   public mouseMoveListener = (event: MouseEvent) => {
     // this.currentScene.mouseMoveHandler(event,this)
-    this.currentScene.mouseMoveHandler(event,this);
+    this.currentScene.mouseMoveHandler(event);
   }
 
 
