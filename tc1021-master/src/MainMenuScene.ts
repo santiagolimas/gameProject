@@ -5,11 +5,12 @@ import PlayingScene from "./PlayingScene"
 import VictoryScene from "./VictoryScene"
 import GameOverScene from "./GameOverScene"
 import selection from "./assets/Menu Selection Click.wav"
+import CreditsScene from "./CreditsScene"
 
 class MainMenuScene extends Scene {
 
     private currentOption: number = 0
-    private options = ["Comenzar juego","Ajustes"]
+    private options = ["Comenzar juego","Créditos"]
     private selectionSound = new Audio(selection);
 
     private widthCanvas = GameContext.context.canvas.width;
@@ -86,7 +87,7 @@ class MainMenuScene extends Scene {
                     engine.setCurrentScene(new PlayingScene());
                 }
                 if(this.currentOption === 1){
-                    engine.setCurrentScene(new GameOverScene());
+                    engine.setCurrentScene(new CreditsScene());
                 }
                 
                 break;

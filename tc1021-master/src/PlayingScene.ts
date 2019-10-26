@@ -425,6 +425,12 @@ class PlayingScene extends Scene {
             this.constructing = true;
             this.buttonColor = "red";
         }
+
+        else if(event.offsetX >= this.positionButton[0] && ( event.offsetX <= (this.positionButton[0] + this.widthButton) )
+        && event.offsetY >= this.positionButton[1] && ( event.offsetY <= (this.positionButton[1] + this.heightButton) ) && this.constructing && this.constructionTimer == 0){
+            this.constructing = false;
+            this.buttonColor = "gray";
+        }
         
         if(this.mouseY >= height/2 -25 && ( this.mouseY <= height/2 + 25 ) && this.constructing){
                 this.statustorres[Math.floor(this.mouseX/50)] = true;
