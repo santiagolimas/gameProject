@@ -25,10 +25,27 @@ class CatWarlock{
     position = [this.coordX,this.coordY];
     measurementsCat = [this.width,this.height];
     private barColor = "green" 
-
+    HealthCounter = 0;
     private bullets = [];
     private statusBullets = [];
 
+
+    public ModificarHealthCounter(valor){
+        this.HealthCounter = valor;
+    }
+
+    public collisionTorre(){
+        this.vidaRestante -= 1;
+ 
+        if(this.vidaRestante <= 0){
+            // this.stance = 2;
+            // this.frame = 0;
+            // this.counter = 0;
+        }
+        else{
+            this.HealthCounter = 1;
+        }
+    }
 
 
     constructor(coordX, coordY){
@@ -170,6 +187,22 @@ class CatWarlock{
 
         context.closePath();
         context.restore();
+
+         
+        if(this.HealthCounter > 0){
+            context.save();
+            context.beginPath();
+            context.fillStyle = "DarkRed";
+            context.fillRect(this.coordX,this.coordY - 5,this.width,5);
+            context.closePath();
+            context.restore();
+            context.save();
+            context.beginPath();
+            context.fillStyle = "green";
+            context.fillRect(this.coordX,this.coordY - 5,this.width * (this.vidaRestante/this.vidaTotal),5);
+            context.closePath();
+            context.restore();
+        }
 
 
         // context.save();

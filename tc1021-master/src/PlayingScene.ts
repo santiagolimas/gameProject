@@ -271,8 +271,12 @@ class PlayingScene extends Scene {
                 if(leftA < rightB && rightA > leftB &&
                     topA < bottomB && bottomA > topB && this.statustorres[i] && this.statusenemigos[j]){
                       
-                    console.log("collision occurred")
-            
+                        console.log("collision occurred")
+                        this.torres[i].ModificarHealthCounter(1);
+                        this.torres[i].collisionTorre();
+
+                }else{
+                    this.torres[i].ModificarHealthCounter(0);
                 }
             }
         }
