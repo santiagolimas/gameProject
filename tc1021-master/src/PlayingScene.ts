@@ -119,7 +119,9 @@ class PlayingScene extends Scene {
             context.save();
             context.beginPath();
             context.globalAlpha = .5;
+            if(!this.statustorres[Math.floor(this.mouseX/50)]){
             context.drawImage(this.catWarlocksprite,this.previewAsset[0][0],this.previewAsset[0][1],30,35,50*(Math.floor((this.mouseX)/50)) ,height/2-25,50,50);
+            }
             context.closePath();
             context.restore();
         }
@@ -348,15 +350,6 @@ class PlayingScene extends Scene {
                 this.paused = true;
             }
         }
-
-        // if(event.key =="a"){
-        //     this.enemigos.push(new Enemigo());
-        // }
-
-         if(event.key === "Escape"){
-            engine.setCurrentScene(new MainMenuScene());
-         }
-
          if(this.paused){
             switch(event.key){
                 case "ArrowUp":
@@ -466,12 +459,14 @@ class PlayingScene extends Scene {
         }
         
         if(this.mouseY >= height/2 -25 && ( this.mouseY <= height/2 + 25 ) && this.constructing){
-                this.statustorres[Math.floor(this.mouseX/50)] = true;
-                console.log(Math.floor(this.mouseX/50))
-                this.torres[Math.floor(this.mouseX/50)] = new CatWarlock(Math.floor(this.mouseX/50) * 50, height/2 - 25);
-                this.constructing = false;
-                this.constructionTimer = 240;
-                this.buttonColor = "gray";
+                if(!this.statustorres[Math.floor(this.mouseX/50)]){
+                    this.statustorres[Math.floor(this.mouseX/50)] = true;
+                    console.log(Math.floor(this.mouseX/50))
+                    this.torres[Math.floor(this.mouseX/50)] = new CatWarlock(Math.floor(this.mouseX/50) * 50, height/2 - 25);
+                    this.constructing = false;
+                    this.constructionTimer = 240;
+                    this.buttonColor = "gray";
+                }
         }
 
         if(this.paused){

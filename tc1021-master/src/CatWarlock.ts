@@ -102,7 +102,7 @@ class CatWarlock{
                 }
                 else if(this.frame == 8){
                     this.ignition.play();
-                    this.bullets.push(new Bullet(this.coordX+this.width,this.coordY));
+                    this.bullets.push(new Bullet(this.coordX+this.width - 30,this.coordY));
                     this.statusBullets.push(true);
                 }
                 this.counter = 0;
