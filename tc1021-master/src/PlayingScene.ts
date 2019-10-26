@@ -177,21 +177,23 @@ class PlayingScene extends Scene {
     public update = (engine: Engine) => {
         const context = GameContext.context;
         const width = context.canvas.width;
-        if(this.deadEnemies == 1){
-            engine.setCurrentScene(new GameOverScene())
+        if(this.deadEnemies == 5){
+            engine.setCurrentScene(new VictoryScene())
         }
 
         if(!this.paused){
             let rand = Math.ceil(Math.random()*600) + 200;
             if(this.ticks == rand || this.ticks > 600){
-                let y = 0;
+                let y = -1;
                 for(let x = 0; x < 5;x++){
-                    if(this.statusenemigos[x] == false){
+                    if(this.statusenemigos[x] == false && y == -1){
                         y = x;
                     }
                 }
-                this.statusenemigos[y] = true;
-                this.enemigos[y] = new Enemigo();
+                if(y != -1){
+                    this.statusenemigos[y] = true;
+                    this.enemigos[y] = new Enemigo();
+                }
                 this.ticks = 0;
             }
             this.ticks++;
@@ -202,8 +204,12 @@ class PlayingScene extends Scene {
             for(let x = 0; x < this.enemigos.length; x++){
                 if(this.statusenemigos[x] == true){
                     this.statusenemigos[x] = this.enemigos[x].getStatus();
-                    if(this.statusenemigos[x] ==true)
+                    if(this.statusenemigos[x] ==true){
                         this.enemigos[x].update();
+                        if(this.enemigos[x].getEnemyCoordinates()[0] <= 0){
+                            engine.setCurrentScene(new GameOverScene());
+                        }
+                    }
                     else{
                         this.deadEnemies++;
                     }
@@ -272,11 +278,32 @@ class PlayingScene extends Scene {
                     topA < bottomB && bottomA > topB && this.statustorres[i] && this.statusenemigos[j]){
                       
                         console.log("collision occurred")
-                        this.torres[i].ModificarHealthCounter(1);
                         this.torres[i].collisionTorre();
+                        this.enemigos[j].collisionTorre();
+                        if(this.torres[i].getStatus() == false){
+                            this.enemigos[j].walk(0);
+                        }
+                        this.statustorres[i] = this.torres[i].getStatus();
+                        if(this.statustorres[i] == false){
+                            for(let x = 0; x < this.enemigos.length; x++){
+                                let [enemyX, enemyY] = this.enemigos[x].getEnemyCoordinates();
+                                let [enemyWidth,enemyHeight] = this.enemigos[x].getMeasurementsEnemy();
+                                // TODO Enemy
+                                //Izq
+                                let leftB = enemyX;
+                                //Derecho
+                                let rightB = enemyX + enemyWidth;
+                                //Top
+                                let topB = enemyY;
+                                //Bottom
+                                let bottomB = enemyY + enemyHeight;
+                                if(leftA < rightB && rightA > leftB &&
+                                    topA < bottomB && bottomA > topB&& this.statusenemigos[x]){
+                                        this.enemigos[x].walk(x*100 + 1)
+                                    }
+                            }
+                        }
 
-                }else{
-                    this.torres[i].ModificarHealthCounter(0);
                 }
             }
         }

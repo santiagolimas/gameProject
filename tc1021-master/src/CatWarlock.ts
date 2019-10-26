@@ -19,32 +19,30 @@ class CatWarlock{
     private stance = 0;
     private sprite = new Image();
     private counter = 0;
+    private status = false;
     private stanceChange = 0;
     private idleFrames = [[20,150],[22,275],[86,275],[149,275],[215,275],[278,275],[344,275]];
     private chargingFrames = [[18,23],[83,23],[145,23],[211,23],[276,23],[339,23],[403,23],[469,23],[534,23],[597,23],[662,23],[725,23],[790,23]];
-    position = [this.coordX,this.coordY];
-    measurementsCat = [this.width,this.height];
+    private position = [this.coordX,this.coordY];
+    private measurementsCat = [this.width,this.height];
     private barColor = "green" 
-    HealthCounter = 0;
+    private HealthCounter = false;
     private bullets = [];
     private statusBullets = [];
-
-
-    public ModificarHealthCounter(valor){
-        this.HealthCounter = valor;
-    }
 
     public collisionTorre(){
         this.vidaRestante -= 1;
  
         if(this.vidaRestante <= 0){
-            // this.stance = 2;
-            // this.frame = 0;
-            // this.counter = 0;
+            this.status = false;
         }
         else{
-            this.HealthCounter = 1;
+            this.HealthCounter = true;;
         }
+    }
+
+    public getStatus(){
+        return this.status;
     }
 
 
@@ -59,6 +57,7 @@ class CatWarlock{
         this.frame = 0;
         this.stance = 0;
         this.sprite.src = CatWarlockSprite;
+        this.status = true;
     }
 
     public update(arrayEnemies: Enemigo[], statusEnemies: boolean[]){
@@ -189,7 +188,7 @@ class CatWarlock{
         context.restore();
 
          
-        if(this.HealthCounter > 0){
+        if(this.HealthCounter == true){
             context.save();
             context.beginPath();
             context.fillStyle = "DarkRed";

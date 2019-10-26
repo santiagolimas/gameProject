@@ -14,11 +14,13 @@ class Enemigo{
     private sprite = new Image();
     private counter = 0;
     private walkingframes = [[22,84],[89,84],[151,84],[211,84]]
-    private attackingframes = [];
+    private waitingframe = [210,20];
+    private attackingframes = [[22,148],[86,148],[145,148],[215,148],[215,150],[215,148],[215,146]];
     private dyingframes = [[20,210],[80,210],[140,210],[200,210],[266,210],[337,210],[400,210]];
     private HealthCounter = 0;
     private stance = 0;
     private status = true;
+    private wakeup = 0;
 
     position = [this.coordX,this.coordY];
     measurementsEnemy = [this.widthEnemy,this.heightEnemy];
@@ -32,6 +34,14 @@ class Enemigo{
         }
         else{
             this.HealthCounter = 1;
+        }
+    }
+
+    public collisionTorre(){
+        if(this.stance != 1){
+            this.stance = 1;
+            this.frame = 0;
+            this.counter = 0;
         }
     }
 
@@ -52,12 +62,25 @@ class Enemigo{
         
     }
 
+    public walk(number){
+        this.stance = 4;
+        this.wakeup = number;
+    }
+
     public update(){
         if(this.HealthCounter > 0){
             this.HealthCounter++;
         }
         if(this.HealthCounter > 60){
             this.HealthCounter = 0;
+        }
+        if(this.wakeup > 0){
+            this.wakeup--;
+            if(this.wakeup == 0){
+                this.stance = 0;
+                this.frame = 0;
+                this.counter = 0;
+            }
         }
         if(this.stance == 0){
             if(this.counter == 30){
@@ -69,6 +92,21 @@ class Enemigo{
                 }
             this.counter++;
             this.coordX -= .5;
+        }
+        else if(this.stance == 1){
+            if(this.counter == 7 && this.frame < 3){
+                this.frame++;
+                this.counter = 0;
+            }
+            else if(this.counter == 7 && this.frame < 6){
+                this.frame++;
+                this.counter = 0;
+            }
+            else if(this.counter == 7 && this.frame == 6){
+                this.frame = 3;
+                this.counter = 0;
+            }
+            this.counter++;
         }
         else if(this.stance == 2){
             if(this.counter == 7){
@@ -118,12 +156,30 @@ class Enemigo{
             context.closePath();
             context.restore();
         }
+        else if(this.stance == 1){
+            context.save();
+            context.beginPath();
+            context.translate(this.coordX + 50,height/2 - 25);
+            context.scale(-1,1);
+            context.drawImage(this.sprite,this.attackingframes[this.frame][0],this.attackingframes[this.frame][1],32, 41,0,0, 50, 50)
+            context.closePath();
+            context.restore();
+        }
         else if(this.stance == 2){
             context.save();
             context.beginPath();
             context.translate(this.coordX + 50,height/2 - 25);
             context.scale(-1,1);
             context.drawImage(this.sprite,this.dyingframes[this.frame][0],this.dyingframes[this.frame][1],40, 45,0,0, 50, 50)
+            context.closePath();
+            context.restore();
+        }
+        else if(this.stance == 4){
+            context.save();
+            context.beginPath();
+            context.translate(this.coordX + 50,height/2 - 25);
+            context.scale(-1,1);
+            context.drawImage(this.sprite,this.waitingframe[0],this.waitingframe[1],28, 42,0,0, 50, 50)
             context.closePath();
             context.restore();
         }
