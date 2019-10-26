@@ -13,7 +13,7 @@ class Enemigo{
     private frame = 0;
     private sprite = new Image();
     private counter = 0;
-    private walkingframes = [20,90,150,210]
+    private walkingframes = [[22,84],[89,84],[151,84],[211,84]]
     private attackingframes = [];
     private dyingframes = [[20,210],[80,210],[140,210],[200,210],[266,210],[337,210],[400,210]];
     private HealthCounter = 0;
@@ -114,7 +114,7 @@ class Enemigo{
             context.beginPath();
             context.translate(this.coordX + 50,height/2 - 25);
             context.scale(-1,1);
-            context.drawImage(this.sprite,this.walkingframes[this.frame], 23,30, 40,0,0, 50, 50)
+            context.drawImage(this.sprite,this.walkingframes[this.frame][0],this.walkingframes[this.frame][1],27, 42,0,0, 50, 50)
             context.closePath();
             context.restore();
         }

@@ -3,20 +3,42 @@ import GameContext from "./GameContext"
 import Engine from "./Engine"
 import PlayingScene from "./PlayingScene"
 import MainMenuScene from "./MainMenuScene"
+import Skull from "./assets/mon2_sprite_base.png"
 
 class GameOverScene extends Scene {
 
+    private sprite = new Image();
     private currentOption: number = 0
     private options = ["Reiniciar","Menú Principal"]
+    private frames= [[343,343],[405,343]]//20,26
+    private laugh1 = 0;
+    private laugh2 = 1;
+    private counter = 0;
     private mousePressed = false;
     private buttons = [[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2-160]
                       ,[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2+60]]
 
-    public enter = () => {}
+    public enter = () => {
+        this.sprite.src = Skull;
+    }
     public render = () => {
         const context = GameContext.context;
         const width = context.canvas.width
         const height = context.canvas.height
+
+        context.save();
+        context.beginPath();
+        context.drawImage(this.sprite,this.frames[this.laugh1][0],this.frames[this.laugh1][1],20,25,width/4 - 200, height/2 - 100,200,200);
+        context.closePath();
+        context.restore();
+
+        context.save();
+        context.beginPath();
+        context.translate(width-(width/4) + 200 ,height/2 -100);
+        context.scale(-1,1);
+        context.drawImage(this.sprite,this.frames[this.laugh2][0],this.frames[this.laugh2][1],20,25,0,0,200,200);
+        context.closePath();
+        context.restore();
 
         context.save()
         context.font = "55px sans-serif"
@@ -54,7 +76,20 @@ class GameOverScene extends Scene {
         context.restore()
 
     }
-    public update = (engine: Engine) => {}
+    public update = (engine: Engine) => {
+        if(this.counter == 5){
+            if(this.laugh1 == 1){
+                this.laugh1 = this.laugh2;
+                this.laugh2++;
+            }
+            else{
+                this.laugh2 = this.laugh1;
+                this.laugh1++;
+            }
+            this.counter = 0;
+        }
+        this.counter++;
+    }
     public keyUpHandler = (event: KeyboardEvent) => {}
     public keyDownHandler = (event: KeyboardEvent, engine: Engine) => {
 

@@ -108,7 +108,7 @@ class PlayingScene extends Scene {
             context.save();
             context.beginPath();
             context.globalAlpha = .5;
-            context.drawImage(this.catWarlocksprite,this.previewAsset[0][0],this.previewAsset[0][1],20,35,50*(Math.floor((this.mouseX)/50)) ,height/2-25,50,50);
+            context.drawImage(this.catWarlocksprite,this.previewAsset[0][0],this.previewAsset[0][1],30,35,50*(Math.floor((this.mouseX)/50)) ,height/2-25,50,50);
             context.closePath();
             context.restore();
         }
