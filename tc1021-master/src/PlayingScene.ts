@@ -9,6 +9,7 @@ import Bullet from "./Bullet"
 import VictoryScene from "./VictoryScene"
 import CatWarlockSprite from "./assets/cat2_base.png"
 import GameOverScene from "./GameOverScene"
+import CreditsScene from "./CreditsScene"
 
 class PlayingScene extends Scene {
 
@@ -24,6 +25,7 @@ class PlayingScene extends Scene {
     private constructing = false;
     private mouseX = 0;
     private mouseY = 0;
+    private enemigosFaltantes = 5;
 
     private buttonPressed = false
     //Enemy characteristics
@@ -39,14 +41,16 @@ class PlayingScene extends Scene {
     private catWarlock = new CatWarlock(0,0);
 
     private currentOption: number = 0
-    private options = ["Reanudar juego","Reiniciar juego","Menú principal","Ajustes"]
+    private options = ["Reanudar juego","Reiniciar juego","Menú principal","Créditos"]
     private selectionSound = new Audio(selection);
+    private playSound = false
 
 
      //todo Variables para botones de interfaz de pausa
      private widthCanvas = GameContext.context.canvas.width;
      private heightCanvas = GameContext.context.canvas.height;
 
+     
 
     //  context.fillRect(width/2 - 200, height/2 - 200 + i * 110 - 55, 400, 70);
     private mousePressed = false
@@ -82,6 +86,13 @@ class PlayingScene extends Scene {
         context.closePath();
         context.restore();
 
+        context.save()
+        context.font = "40px sans-serif"
+        context.fillStyle = "black"
+        context.textAlign = "center"
+        context.lineWidth = 1.8;
+        context.fillText("Enemigos faltantes: " + (this.enemigosFaltantes - this.deadEnemies),width/2 + 200,100);
+        context.restore()
 
     
         //Button
@@ -384,25 +395,47 @@ class PlayingScene extends Scene {
               && event.offsetY >= this.positionButton1[1] && ( event.offsetY <= (this.positionButton1[1] + this.heightButton1) ) 
         ){
                     this.currentOption = 0;
-                    console.log("MOVIENDOME EN B1")
+
+                    if(!this.playSound){
+                        this.selectionSound.play()
+                    }
+        
+                    this.playSound = true;
 
         } else if(event.offsetX >= this.positionButton2[0] && ( event.offsetX <= (this.positionButton2[0] + this.widthButton2) )
             && event.offsetY >= this.positionButton2[1] && ( event.offsetY <= (this.positionButton2[1] + this.heightButton2) ) 
             ){
                      this.currentOption = 1;
-                     console.log("MOVIENDOME EN B2")
+
+                     if(!this.playSound){
+                        this.selectionSound.play()
+                    }
+        
+                    this.playSound = true;
 
         }  else if(event.offsetX >= this.positionButton3[0] && ( event.offsetX <= (this.positionButton3[0] + this.widthButton3) )
         && event.offsetY >= this.positionButton3[1] && ( event.offsetY <= (this.positionButton3[1] + this.heightButton3) ) 
         ){
               this.currentOption = 2;
-              console.log("MOVIENDOME EN B3")
+
+              if(!this.playSound){
+                this.selectionSound.play()
+            }
+
+            this.playSound = true;
 
         } else if(event.offsetX >= this.positionButton4[0] && ( event.offsetX <= (this.positionButton4[0] + this.widthButton4) )
       && event.offsetY >= this.positionButton4[1] && ( event.offsetY <= (this.positionButton4[1] + this.heightButton4) ) 
       ){
                this.currentOption = 3;
-               console.log("MOVIENDOME EN B4")
+
+               if(!this.playSound){
+                this.selectionSound.play()
+            }
+
+            this.playSound = true;
+    }else{
+        this.playSound = false
     }  
             
     }
@@ -462,7 +495,7 @@ class PlayingScene extends Scene {
           } else if(event.offsetX >= this.positionButton4[0] && ( event.offsetX <= (this.positionButton4[0] + this.widthButton4) )
           && event.offsetY >= this.positionButton4[1] && ( event.offsetY <= (this.positionButton4[1] + this.heightButton4) ) 
           ){
-                // engine.setCurrentScene(new PlayingScene())
+            engine.setCurrentScene(new CreditsScene());
 
            } else{
             this.mousePressed = false;

@@ -27,7 +27,7 @@ class MainMenuScene extends Scene {
     private positionButton2 = [this.widthCanvas/2 - 200, this.heightCanvas/2 - 60 + 200 - 100];
 
     private mousePressed = false
-    private auxFlag = false
+    private playSound = false
 
     public enter = () => {}
 
@@ -104,14 +104,29 @@ class MainMenuScene extends Scene {
       && event.offsetY >= this.positionButton1[1] && ( event.offsetY <= (this.positionButton1[1] + this.heightButton1) ) 
       ){
             this.currentOption = 0;
-       } 
+            
+            if(!this.playSound){
+                this.selectionSound.play()
+            }
 
-       if(event.offsetX >= this.positionButton2[0] && ( event.offsetX <= (this.positionButton2[0] + this.widthButton2) )
+            this.playSound = true;
+
+       } else if(event.offsetX >= this.positionButton2[0] && ( event.offsetX <= (this.positionButton2[0] + this.widthButton2) )
        && event.offsetY >= this.positionButton2[1] && ( event.offsetY <= (this.positionButton2[1] + this.heightButton2) ) 
        ){
              this.currentOption = 1;
-        }  
+
+             if(!this.playSound){
+                this.selectionSound.play()
+            }
+
+            this.playSound = true;
+
+        }else{
+            this.playSound = false
+        }
     
+      
     }
 
     
@@ -124,8 +139,12 @@ class MainMenuScene extends Scene {
         && event.offsetY >= this.positionButton1[1] && ( event.offsetY <= (this.positionButton1[1] + this.heightButton1) ) 
         ){
               engine.setCurrentScene(new PlayingScene())
-         } 
-         else{
+         }else if(event.offsetX >= this.positionButton2[0] && ( event.offsetX <= (this.positionButton2[0] + this.widthButton2) )
+         && event.offsetY >= this.positionButton2[1] && ( event.offsetY <= (this.positionButton2[1] + this.heightButton2) )
+         ){
+
+            engine.setCurrentScene(new CreditsScene());
+         }else{
              this.mousePressed = false;
          }
     }

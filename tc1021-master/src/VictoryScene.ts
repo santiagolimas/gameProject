@@ -3,6 +3,8 @@ import GameContext from "./GameContext"
 import Engine from "./Engine"
 import PlayingScene from "./PlayingScene"
 import MainMenuScene from "./MainMenuScene"
+import selection from "./assets/Menu Selection Click.wav"
+
 
 
 class VictoryScene extends Scene {
@@ -12,6 +14,8 @@ class VictoryScene extends Scene {
     private mousePressed = false;
     private buttons = [[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2-160]
                       ,[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2+60]]
+    private playSound = false
+    private selectionSound = new Audio(selection);
 
     public enter = () => {}
     public render = () => {
@@ -86,11 +90,27 @@ class VictoryScene extends Scene {
         && event.offsetY >= this.buttons[0][1] && ( event.offsetY <= (this.buttons[0][1] + 100) ) 
         ){
             this.currentOption = 0;
+
+            if(!this.playSound){
+                this.selectionSound.play()
+            }
+
+            this.playSound = true;
+
          }
         else if(event.offsetX >= this.buttons[1][0] && ( event.offsetX <= (this.buttons[1][0] + 400) )
         && event.offsetY >= this.buttons[1][1] && ( event.offsetY <= (this.buttons[1][1] + 100) )){
             this.currentOption = 1;
+
+            if(!this.playSound){
+                this.selectionSound.play()
+            }
+
+            this.playSound = true;
+        }else{
+            this.playSound = false
         }
+        
     }
 
     public  mouseUpHandler = (event: MouseEvent) => {

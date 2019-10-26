@@ -4,6 +4,8 @@ import Engine from "./Engine"
 import PlayingScene from "./PlayingScene"
 import MainMenuScene from "./MainMenuScene"
 import Skull from "./assets/mon2_sprite_base.png"
+import selection from "./assets/Menu Selection Click.wav"
+
 
 class GameOverScene extends Scene {
 
@@ -17,6 +19,8 @@ class GameOverScene extends Scene {
     private mousePressed = false;
     private buttons = [[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2-160]
                       ,[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2+60]]
+    private selectionSound = new Audio(selection);
+    private playSound = false
 
     public enter = () => {
         this.sprite.src = Skull;
@@ -117,10 +121,25 @@ class GameOverScene extends Scene {
         && event.offsetY >= this.buttons[0][1] && ( event.offsetY <= (this.buttons[0][1] + 100) ) 
         ){
             this.currentOption = 0;
+
+            if(!this.playSound){
+                this.selectionSound.play()
+            }
+
+            this.playSound = true;
+
          }
         else if(event.offsetX >= this.buttons[1][0] && ( event.offsetX <= (this.buttons[1][0] + 400) )
         && event.offsetY >= this.buttons[1][1] && ( event.offsetY <= (this.buttons[1][1] + 100) )){
             this.currentOption = 1;
+
+            if(!this.playSound){
+                this.selectionSound.play()
+            }
+
+            this.playSound = true;
+        }else{
+            this.playSound = false
         }
     }
 
