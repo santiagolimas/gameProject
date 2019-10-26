@@ -64,7 +64,7 @@ class MainMenuScene extends Scene {
 
     }
 
-    public update = () => {}
+    public update = (engine: Engine) => {}
     
     public keyUpHandler = (event: KeyboardEvent) => {}
 

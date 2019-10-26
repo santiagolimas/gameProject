@@ -84,7 +84,7 @@ class Engine {
     // this.character.update();
     // this.character.render();
     this.currentScene.render();
-    this.currentScene.update();
+    this.currentScene.update(this);
     requestAnimationFrame(this.tick);
   };
 }

@@ -6,6 +6,7 @@ import Enemigo from "./Enemigo"
 import selection from "./assets/Menu Selection Click.wav"
 import CatWarlock from "./CatWarlock"
 import Bullet from "./Bullet"
+import VictoryScene from "./VictoryScene"
 
 class PlayingScene extends Scene {
 
@@ -14,6 +15,7 @@ class PlayingScene extends Scene {
     private heightButton = 80;
     private positionButton = [50,20];
     private buttonColor = "gray"
+    private deadEnemies = 0;
 
     private buttonPressed = false
     //Enemy characteristics
@@ -21,10 +23,10 @@ class PlayingScene extends Scene {
     private paused = false
     private direccion = 1;
     private coordX = 0;
-    private enemigos = [new Enemigo()];
+    private enemigos = [new Enemigo(),new Enemigo(),new Enemigo(),new Enemigo(),new Enemigo()];
+    private statusenemigos = [false,false,false,false,false]
     private ticks = 0;
     private catWarlock = new CatWarlock(0,0);
-    private bullet = new Bullet();
 
     private currentOption: number = 0
     private options = ["Reanudar juego","Reiniciar juego","Menú principal","Ajustes"]
@@ -84,14 +86,14 @@ class PlayingScene extends Scene {
 
 
         for(let x = 0; x < this.enemigos.length; x++){
-            this.enemigos[x].render();
+            if(this.statusenemigos[x]== true)
+                this.enemigos[x].render();
         }
 
         
 
 
         this.catWarlock.render();
-        this.bullet.render();
 
        
 
@@ -141,22 +143,38 @@ class PlayingScene extends Scene {
         
     }
 
-    public update = () => {
+    public update = (engine: Engine) => {
         const context = GameContext.context;
         const width = context.canvas.width;
-        this.catWarlock.update();
-        this.bullet.update();
+        this.catWarlock.update(this.enemigos,this.statusenemigos);
+        if(this.deadEnemies == 5){
+            engine.setCurrentScene(new VictoryScene())
+        }
 
         if(!this.paused){
             let rand = Math.ceil(Math.random()*600) + 200;
             if(this.ticks == rand || this.ticks > 600){
-                this.enemigos.push(new Enemigo());
+                let y = 0;
+                for(let x = 0; x < 5;x++){
+                    if(this.statusenemigos[x] == false){
+                        y = x;
+                    }
+                }
+                this.statusenemigos[y] = true;
+                this.enemigos[y] = new Enemigo();
                 this.ticks = 0;
             }
             this.ticks++;
 
             for(let x = 0; x < this.enemigos.length; x++){
-                this.enemigos[x].update();
+                if(this.statusenemigos[x] == true){
+                    this.statusenemigos[x] = this.enemigos[x].getStatus();
+                    if(this.statusenemigos[x] ==true)
+                        this.enemigos[x].update();
+                    else{
+                        this.deadEnemies++;
+                    }
+                }
             }
 
             if(this.direccion == 1){
@@ -187,7 +205,6 @@ class PlayingScene extends Scene {
         const width = context.canvas.width;
         const height = context.canvas.height;
         this.catWarlock = new CatWarlock(0,height/2 - 25);
-        this.bullet = new Bullet();
     }
 
     public keyUpHandler = (event: KeyboardEvent) => {

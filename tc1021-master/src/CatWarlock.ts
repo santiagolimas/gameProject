@@ -4,9 +4,11 @@ import Engine from "./Engine";
 import GameOverScene from "./GameOverScene"
 import Bullet from "./Bullet"
 import Enemigo from "./Enemigo"
+import ignition from "./assets/flame.ogg"
 
 class CatWarlock{
     
+    private ignition = new Audio(ignition)
     private vidaTotal = 1000;
     private vidaRestante = 1000;
     private coordX = 1000;
@@ -24,7 +26,8 @@ class CatWarlock{
     measurementsCat = [this.width,this.height];
     private barColor = "green" 
 
-    private bullets = [new Bullet()];
+    private bullets = [];
+    private statusBullets = [];
 
 
 
@@ -41,7 +44,7 @@ class CatWarlock{
         this.sprite.src = CatWarlockSprite;
     }
 
-    public update(arrayEnemies: Enemigo[]){
+    public update(arrayEnemies: Enemigo[], statusEnemies: boolean[]){
         if(this.stance == 0){
             if(this.stanceChange <= 60){
                 this.stanceChange++;
@@ -78,21 +81,27 @@ class CatWarlock{
 
             if(this.counter == 7){
                 this.frame++;
-                this.bullets.push(new Bullet());
-
                 if(this.frame > 12){
                     this.frame = 0;
+                }
+                else if(this.frame == 12){
+                    this.ignition.play();
+                    this.bullets.push(new Bullet(this.coordX+this.width,this.coordY));
+                    this.statusBullets.push(true);
                 }
                 this.counter = 0;
                 }
             this.counter++;
-
-
+        }
             for(let i = 0; i < this.bullets.length; i++){
+                if(this.statusBullets){
+                    this.statusBullets[i] = this.bullets[i].getStatus();
+                    if(this.statusBullets)
+                        this.bullets[i].update();
 
-
+                }
                 for(let j = 0; j < arrayEnemies.length; j++){
-                this.bullets[i].update();
+                
 
                 //RECT2
                 let [enemyX, enemyY] = arrayEnemies[j].getEnemyCoordinates();
@@ -127,16 +136,17 @@ class CatWarlock{
                 //A.Bottom < B.Top
 
                 if(leftA < rightB && rightA > leftB &&
-                    topA < bottomB && bottomA > topB){
-            
-                console.log("Collision occured")
+                    topA < bottomB && bottomA > topB && statusEnemies[j] && this.statusBullets[i]){
+                        this.bullets[i].collisionBullet();
+                        arrayEnemies[j].collisionEnemigo();
+                        console.log("Collision occured" + " " + i + " " + j)
+                        break;
             
                 }
 
 
                 }
             }
-        }
         this.position[0] = this.coordX;
         this.position[1] = this.coordY;
 
@@ -154,7 +164,8 @@ class CatWarlock{
             context.drawImage(this.sprite,this.chargingFrames[this.frame][0],this.chargingFrames[this.frame][1],30, 35,this.coordX,this.coordY, 50, 50);
         
         for(let i = 0; i < this.bullets.length; i++){
-            this.bullets[i].render();
+            if(this.statusBullets[i])
+                this.bullets[i].render();
         }
 
         context.closePath();
