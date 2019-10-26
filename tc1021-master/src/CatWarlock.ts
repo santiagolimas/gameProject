@@ -139,7 +139,7 @@ class CatWarlock{
                     topA < bottomB && bottomA > topB && statusEnemies[j] && this.statusBullets[i]){
                         this.bullets[i].collisionBullet();
                         arrayEnemies[j].collisionEnemigo();
-                        console.log("Collision occured" + " " + i + " " + j)
+                        // console.log("Collision occured" + " " + i + " " + j)
                         break;
             
                 }

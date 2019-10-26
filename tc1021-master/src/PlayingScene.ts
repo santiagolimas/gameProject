@@ -33,7 +33,7 @@ class PlayingScene extends Scene {
     private coordX = 0;
     private enemigos = [new Enemigo(),new Enemigo(),new Enemigo(),new Enemigo(),new Enemigo()];
     private statusenemigos = [false,false,false,false,false]
-    private torres = [];
+    private torres: CatWarlock[] = [];
     private statustorres = [];
     private ticks = 0;
     private catWarlock = new CatWarlock(0,0);
@@ -122,7 +122,7 @@ class PlayingScene extends Scene {
 
         for(let x = 0; x < 24; x++){
             if(this.statustorres[x]){
-                this.torres[x].render(this.enemigos,this.statusenemigos);
+                this.torres[x].render();
             }
         }
 
@@ -236,6 +236,47 @@ class PlayingScene extends Scene {
             }
         }
 
+
+           // //TODO: Colision entre enemigos y torres
+        for(let i = 0; i < this.torres.length;i++){
+            for(let j = 0; j < this.enemigos.length; j++){
+                
+                let [torreX, torreY] = this.torres[i].getCatWarlockCoordinates();
+                let [torreWidth, torreHeight] = this.torres[i].getMeasurementsCatWarlock();
+
+                let [enemyX, enemyY] = this.enemigos[j].getEnemyCoordinates();
+                let [enemyWidth,enemyHeight] = this.enemigos[j].getMeasurementsEnemy();
+
+                // TODO Torre
+                //Izq
+                let leftA = torreX;
+                //Derecho
+                let rightA = torreX + torreWidth;
+                //Top
+                let topA = torreY;
+                //Bottom
+                let bottomA = torreY + torreHeight;
+
+                // TODO Enemy
+                //Izq
+                let leftB = enemyX;
+                //Derecho
+                let rightB = enemyX + enemyWidth;
+                //Top
+                let topB = enemyY;
+                //Bottom
+                let bottomB = enemyY + enemyHeight;
+
+
+                if(leftA < rightB && rightA > leftB &&
+                    topA < bottomB && bottomA > topB && this.statustorres[i] && this.statusenemigos[j]){
+                      
+                    console.log("collision occurred")
+            
+                }
+            }
+        }
+
         
     }
 
@@ -247,7 +288,7 @@ class PlayingScene extends Scene {
         this.catWarlocksprite.src = CatWarlockSprite;
         for(let x = 0; x < 24; x++){
             this.torres.push(new CatWarlock(x*50,0));
-            this.torres.push(false);
+            this.statustorres.push(false);
         }
     }
 
