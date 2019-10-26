@@ -18,13 +18,13 @@ class Bullet{
     position = [this.coordX,this.coordY];
     measurementsBullet = [this.width,this.height];
 
-    constructor(coordX, coordY){
+    constructor(){
         const context = GameContext.context;
         const height = context.canvas.height;
         const width = context.canvas.width
   
-        this.coordX = coordX;
-        this.coordY = coordY;
+        this.coordX = 70;
+        this.coordY = height/2 - 25;
         this.frame = 0;
         this.stance = 0;
         this.sprite.src = BulletSprite;

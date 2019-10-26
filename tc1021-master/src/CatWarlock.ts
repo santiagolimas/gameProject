@@ -2,6 +2,8 @@ import GameContext from "./GameContext"
 import CatWarlockSprite from "./assets/cat2_base.png"
 import Engine from "./Engine";
 import GameOverScene from "./GameOverScene"
+import Bullet from "./Bullet"
+import Enemigo from "./Enemigo"
 
 class CatWarlock{
     
@@ -22,6 +24,10 @@ class CatWarlock{
     measurementsCat = [this.width,this.height];
     private barColor = "green" 
 
+    private bullets = [new Bullet()];
+
+
+
     constructor(coordX, coordY){
         const context = GameContext.context;
         const height = context.canvas.height;
@@ -33,11 +39,9 @@ class CatWarlock{
         this.frame = 0;
         this.stance = 0;
         this.sprite.src = CatWarlockSprite;
-
-        
     }
 
-    public update(){
+    public update(arrayEnemies: Enemigo[]){
         if(this.stance == 0){
             if(this.stanceChange <= 60){
                 this.stanceChange++;
@@ -71,14 +75,67 @@ class CatWarlock{
             this.counter++;
         }
         else if(this.stance == 1){
+
             if(this.counter == 7){
                 this.frame++;
+                this.bullets.push(new Bullet());
+
                 if(this.frame > 12){
                     this.frame = 0;
                 }
                 this.counter = 0;
                 }
             this.counter++;
+
+
+            for(let i = 0; i < this.bullets.length; i++){
+
+
+                for(let j = 0; j < arrayEnemies.length; j++){
+                this.bullets[i].update();
+
+                //RECT2
+                let [enemyX, enemyY] = arrayEnemies[j].getEnemyCoordinates();
+                let [enemyWidth, enemyHeight] = arrayEnemies[j].getMeasurementsEnemy();
+
+                let [bulletX, bulletY] = this.bullets[i].getBulletCoordinates();
+                let [bulletWidth,bulletHeight] = this.bullets[i].getMeasurementsBullet();
+
+                // TODO Bullet
+                //Izq
+                let leftA = bulletX;
+                //Derecho
+                let rightA = bulletX + bulletWidth;
+                //Top
+                let topA = bulletY;
+                //Bottom
+                let bottomA = bulletY + bulletHeight;
+
+                // TODO Enemy
+                //Izq
+                let leftB = enemyX;
+                //Derecho
+                let rightB = enemyX + enemyWidth;
+                //Top
+                let topB = enemyY;
+                //Bottom
+                let bottomB = enemyY + enemyHeight;
+
+                //A.Left < B.Right
+                //A.Right > B.Left
+                //A.Top > B.Bottom
+                //A.Bottom < B.Top
+
+                if(leftA < rightB && rightA > leftB &&
+                    topA < bottomB && bottomA > topB){
+            
+                console.log("Collision occured")
+            
+                }
+
+
+                }
+            }
         }
         this.position[0] = this.coordX;
         this.position[1] = this.coordY;
@@ -95,6 +152,11 @@ class CatWarlock{
             context.drawImage(this.sprite,this.idleFrames[this.frame][0],this.idleFrames[this.frame][1],20, 35,this.coordX,this.coordY, 50, 50);
         else if(this.stance == 1)
             context.drawImage(this.sprite,this.chargingFrames[this.frame][0],this.chargingFrames[this.frame][1],30, 35,this.coordX,this.coordY, 50, 50);
+        
+        for(let i = 0; i < this.bullets.length; i++){
+            this.bullets[i].render();
+        }
+
         context.closePath();
         context.restore();
 

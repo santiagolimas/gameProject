@@ -24,7 +24,7 @@ class PlayingScene extends Scene {
     private enemigos = [new Enemigo()];
     private ticks = 0;
     private catWarlock = new CatWarlock(0,0);
-    private bullet = new Bullet(0,0);
+    private bullet = new Bullet();
 
     private currentOption: number = 0
     private options = ["Reanudar juego","Reiniciar juego","Menú principal","Ajustes"]
@@ -86,6 +86,9 @@ class PlayingScene extends Scene {
         for(let x = 0; x < this.enemigos.length; x++){
             this.enemigos[x].render();
         }
+
+        
+
 
         this.catWarlock.render();
         this.bullet.render();
@@ -184,7 +187,7 @@ class PlayingScene extends Scene {
         const width = context.canvas.width;
         const height = context.canvas.height;
         this.catWarlock = new CatWarlock(0,height/2 - 25);
-        this.bullet = new Bullet(70,height/2-22);
+        this.bullet = new Bullet();
     }
 
     public keyUpHandler = (event: KeyboardEvent) => {
@@ -202,9 +205,9 @@ class PlayingScene extends Scene {
             }
         }
 
-        if(event.key =="a"){
-            this.enemigos.push(new Enemigo());
-        }
+        // if(event.key =="a"){
+        //     this.enemigos.push(new Enemigo());
+        // }
 
          if(event.key === "Escape"){
             engine.setCurrentScene(new MainMenuScene());
