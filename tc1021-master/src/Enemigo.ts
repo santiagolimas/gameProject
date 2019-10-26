@@ -28,15 +28,15 @@ class Enemigo{
     public collisionEnemigo(){
         if(this.vidaRestante > 0){
             this.vidaRestante -= 100;
-        }
-        if(this.vidaRestante <= 0){
-            this.stance = 2;
-            this.frame = 0;
-            this.counter = 0;
-        }
-        else{
-            this.HealthCounter = 1;
-        }
+            if(this.vidaRestante <= 0){
+                this.stance = 2;
+                this.frame = 0;
+                this.counter = 0;
+            }
+            else{
+                this.HealthCounter = 1;
+            }
+        }  
     }
 
     public collisionTorre(){
