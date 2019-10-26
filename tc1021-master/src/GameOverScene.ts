@@ -19,6 +19,14 @@ class GameOverScene extends Scene {
         const height = context.canvas.height
 
         context.save()
+        context.font = "55px sans-serif"
+        context.fillStyle = "black"
+        context.textAlign = "center"
+        context.lineWidth = 1.8;
+        context.fillText("HAS PERDIDO...  ¡INTENTALO DE NUEVO!",width/2,55);
+        context.restore()
+
+        context.save()
         context.beginPath()
         context.textAlign = "center"
         context.fillStyle = "white"

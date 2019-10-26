@@ -8,6 +8,7 @@ import CatWarlock from "./CatWarlock"
 import Bullet from "./Bullet"
 import VictoryScene from "./VictoryScene"
 import CatWarlockSprite from "./assets/cat2_base.png"
+import GameOverScene from "./GameOverScene"
 
 class PlayingScene extends Scene {
 
@@ -176,7 +177,7 @@ class PlayingScene extends Scene {
     public update = (engine: Engine) => {
         const context = GameContext.context;
         const width = context.canvas.width;
-        if(this.deadEnemies == 5){
+        if(this.deadEnemies == 1){
             engine.setCurrentScene(new VictoryScene())
         }
 
