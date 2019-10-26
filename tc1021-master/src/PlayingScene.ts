@@ -178,7 +178,7 @@ class PlayingScene extends Scene {
         const context = GameContext.context;
         const width = context.canvas.width;
         if(this.deadEnemies == 1){
-            engine.setCurrentScene(new VictoryScene())
+            engine.setCurrentScene(new GameOverScene())
         }
 
         if(!this.paused){

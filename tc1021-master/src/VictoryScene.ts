@@ -10,8 +10,8 @@ class VictoryScene extends Scene {
     private currentOption: number = 0
     private options = ["Reiniciar","Menú Principal"]
     private mousePressed = false;
-    private buttons = [[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2-60]
-                      ,[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2+150]]
+    private buttons = [[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2-160]
+                      ,[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2+60]]
 
     public enter = () => {}
     public render = () => {
@@ -26,7 +26,7 @@ class VictoryScene extends Scene {
         context.lineWidth = 1.8;
         context.fillText("¡HAS GANADO!   ¡FELICIDADES!",width/2,55);
         context.restore()
-        
+
         context.save()
         context.beginPath()
         context.textAlign = "center"

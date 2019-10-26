@@ -9,8 +9,8 @@ class GameOverScene extends Scene {
     private currentOption: number = 0
     private options = ["Reiniciar","Menú Principal"]
     private mousePressed = false;
-    private buttons = [[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2-60]
-                      ,[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2+150]]
+    private buttons = [[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2-160]
+                      ,[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2+60]]
 
     public enter = () => {}
     public render = () => {
