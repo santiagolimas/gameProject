@@ -26,8 +26,8 @@ class Bullet{
         const height = context.canvas.height;
         const width = context.canvas.width
   
-        this.coordX = 70;
-        this.coordY = height/2 - 25;
+        this.coordX = coordX;
+        this.coordY = coordY;
         this.frame = 0;
         this.stance = 0;
         this.sprite.src = BulletSprite;

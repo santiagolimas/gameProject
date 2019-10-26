@@ -24,7 +24,7 @@ class Enemigo{
     measurementsEnemy = [this.widthEnemy,this.heightEnemy];
     
     public collisionEnemigo(){
-        this.vidaRestante -= 200;
+        this.vidaRestante -= 100;
         if(this.vidaRestante <= 0){
             this.stance = 2;
             this.frame = 0;

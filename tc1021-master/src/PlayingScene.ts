@@ -7,6 +7,7 @@ import selection from "./assets/Menu Selection Click.wav"
 import CatWarlock from "./CatWarlock"
 import Bullet from "./Bullet"
 import VictoryScene from "./VictoryScene"
+import CatWarlockSprite from "./assets/cat2_base.png"
 
 class PlayingScene extends Scene {
 
@@ -16,6 +17,12 @@ class PlayingScene extends Scene {
     private positionButton = [50,20];
     private buttonColor = "gray"
     private deadEnemies = 0;
+    private constructionTimer = 0;
+    private previewAsset = [[20,150]];
+    private catWarlocksprite = new Image();
+    private constructing = false;
+    private mouseX = 0;
+    private mouseY = 0;
 
     private buttonPressed = false
     //Enemy characteristics
@@ -25,6 +32,8 @@ class PlayingScene extends Scene {
     private coordX = 0;
     private enemigos = [new Enemigo(),new Enemigo(),new Enemigo(),new Enemigo(),new Enemigo()];
     private statusenemigos = [false,false,false,false,false]
+    private torres = [];
+    private statustorres = [];
     private ticks = 0;
     private catWarlock = new CatWarlock(0,0);
 
@@ -82,6 +91,26 @@ class PlayingScene extends Scene {
         context.fillRect(x, y, this.widthButton, this.heightButton);
         context.closePath();
         context.restore();
+        context.save();
+        context.beginPath();
+        context.drawImage(this.catWarlocksprite,this.previewAsset[0][0],this.previewAsset[0][1],20,35,x + this.widthButton/2 - 20, this.heightButton/2 - 17,40,75);
+        context.closePath();
+        context.restore();
+        context.save();
+        context.beginPath();
+        context.fillStyle = "black";
+        context.globalAlpha = .8;
+        context.fillRect(x,y,this.widthButton, this.heightButton*(this.constructionTimer/240));
+        context.closePath();
+        context.restore();
+        if(this.mouseY >= height/2 -25 && ( this.mouseY <= height/2 + 25 ) && this.constructing){
+            context.save();
+            context.beginPath();
+            context.globalAlpha = .5;
+            context.drawImage(this.catWarlocksprite,this.previewAsset[0][0],this.previewAsset[0][1],20,35,50*(Math.floor((this.mouseX)/50)) ,height/2-25,50,50);
+            context.closePath();
+            context.restore();
+        }
 
 
 
@@ -90,10 +119,11 @@ class PlayingScene extends Scene {
                 this.enemigos[x].render();
         }
 
-        
-
-
-        this.catWarlock.render();
+        for(let x = 0; x < 24; x++){
+            if(this.statustorres[x]){
+                this.torres[x].render(this.enemigos,this.statusenemigos);
+            }
+        }
 
        
 
@@ -146,7 +176,6 @@ class PlayingScene extends Scene {
     public update = (engine: Engine) => {
         const context = GameContext.context;
         const width = context.canvas.width;
-        this.catWarlock.update(this.enemigos,this.statusenemigos);
         if(this.deadEnemies == 5){
             engine.setCurrentScene(new VictoryScene())
         }
@@ -165,6 +194,9 @@ class PlayingScene extends Scene {
                 this.ticks = 0;
             }
             this.ticks++;
+            if(this.constructionTimer>0){
+                this.constructionTimer--;
+            }
 
             for(let x = 0; x < this.enemigos.length; x++){
                 if(this.statusenemigos[x] == true){
@@ -174,6 +206,12 @@ class PlayingScene extends Scene {
                     else{
                         this.deadEnemies++;
                     }
+                }
+            }
+
+            for(let x = 0; x < 24; x++){
+                if(this.statustorres[x]){
+                    this.torres[x].update(this.enemigos,this.statusenemigos);
                 }
             }
 
@@ -205,6 +243,11 @@ class PlayingScene extends Scene {
         const width = context.canvas.width;
         const height = context.canvas.height;
         this.catWarlock = new CatWarlock(0,height/2 - 25);
+        this.catWarlocksprite.src = CatWarlockSprite;
+        for(let x = 0; x < 24; x++){
+            this.torres.push(new CatWarlock(x*50,0));
+            this.torres.push(false);
+        }
     }
 
     public keyUpHandler = (event: KeyboardEvent) => {
@@ -258,33 +301,11 @@ class PlayingScene extends Scene {
         
     }
 
-    public handleMouseMoveEventEnemigo = (offsetX,offsetY) => {
-        const context = GameContext.context;
-       
-
-        for(let x = 0; x < this.enemigos.length; x++){
-            
-            let [enemyX,enemyY] = this.enemigos[x].getEnemyCoordinates();
-            let [enemyWidth,enemyHeight] = this.enemigos[x].getMeasurementsEnemy();
-
-            if(offsetX >= enemyX && ( offsetX <= (enemyX + enemyWidth) )
-            && offsetY >= enemyY && ( offsetY <= (enemyY+ enemyHeight) ) 
-            ){
-                context.save()
-                context.beginPath()
-                context.fillRect(enemyX, enemyY + enemyHeight, this.enemigos[x].getHealth(), 10);
-                context.closePath();
-                context.restore();
-            }
-
-
-
-        }
-           
-        }
-
     public mouseMoveHandler = (event) => {
-   
+        
+        this.mouseX = event.offsetX;
+        this.mouseY = event.offsetY;
+    
     if (this.paused){ 
         if(event.offsetX >= this.positionButton1[0] && ( event.offsetX <= (this.positionButton1[0] + this.widthButton1) )
               && event.offsetY >= this.positionButton1[1] && ( event.offsetY <= (this.positionButton1[1] + this.heightButton1) ) 
@@ -316,11 +337,30 @@ class PlayingScene extends Scene {
     }
 
     public  mouseUpHandler = (event: MouseEvent) => {
+        
         this.mousePressed = false;
     }
 
     public mouseDownHandler = (event: MouseEvent,engine: Engine) => {
 
+        const context = GameContext.context;
+        const height = context.canvas.height;
+        const width = context.canvas.width
+
+        if(event.offsetX >= this.positionButton[0] && ( event.offsetX <= (this.positionButton[0] + this.widthButton) )
+        && event.offsetY >= this.positionButton[1] && ( event.offsetY <= (this.positionButton[1] + this.heightButton) ) && !this.constructing && this.constructionTimer == 0){
+            this.constructing = true;
+            this.buttonColor = "red";
+        }
+        
+        if(this.mouseY >= height/2 -25 && ( this.mouseY <= height/2 + 25 ) && this.constructing){
+                this.statustorres[Math.floor(this.mouseX/50)] = true;
+                console.log(Math.floor(this.mouseX/50))
+                this.torres[Math.floor(this.mouseX/50)] = new CatWarlock(Math.floor(this.mouseX/50) * 50, height/2 - 25);
+                this.constructing = false;
+                this.constructionTimer = 240;
+                this.buttonColor = "gray";
+        }
 
         if(this.paused){
 
