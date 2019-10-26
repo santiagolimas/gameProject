@@ -20,8 +20,8 @@ class CatWarlock{
     private sprite = new Image();
     private counter = 0;
     private stanceChange = 0;
-    private idleFrames = [[20,150],[20,275],[83,275],[147,275],[210,275],[275,275],[340,275]];
-    private chargingFrames = [[20,23],[80,23],[145,23],[205,23],[275,23],[335,23],[400,23],[465,23],[530,23],[595,23],[660,23],[725,23],[785,23]];
+    private idleFrames = [[20,150],[22,275],[86,275],[149,275],[215,275],[278,275],[344,275]];
+    private chargingFrames = [[18,23],[83,23],[145,23],[211,23],[276,23],[339,23],[403,23],[469,23],[534,23],[597,23],[662,23],[725,23],[790,23]];
     position = [this.coordX,this.coordY];
     measurementsCat = [this.width,this.height];
     private barColor = "green" 
@@ -46,7 +46,7 @@ class CatWarlock{
 
     public update(arrayEnemies: Enemigo[], statusEnemies: boolean[]){
         if(this.stance == 0){
-            if(this.stanceChange <= 60){
+            if(this.stanceChange <= 49){
                 this.stanceChange++;
             }
             else{
@@ -68,7 +68,7 @@ class CatWarlock{
             }
         }
         if(this.stance == 0){
-            if(this.counter == 15){
+            if(this.counter == 7){
                 this.frame++;
                 if(this.frame > 6){
                     this.frame = 0;
@@ -84,7 +84,7 @@ class CatWarlock{
                 if(this.frame > 12){
                     this.frame = 0;
                 }
-                else if(this.frame == 12){
+                else if(this.frame == 8){
                     this.ignition.play();
                     this.bullets.push(new Bullet(this.coordX+this.width,this.coordY));
                     this.statusBullets.push(true);
@@ -159,7 +159,7 @@ class CatWarlock{
         context.save();
         context.beginPath();
         if(this.stance == 0 )
-            context.drawImage(this.sprite,this.idleFrames[this.frame][0],this.idleFrames[this.frame][1],20, 35,this.coordX,this.coordY, 50, 50);
+            context.drawImage(this.sprite,this.idleFrames[this.frame][0],this.idleFrames[this.frame][1],30, 35,this.coordX,this.coordY, 50, 50);
         else if(this.stance == 1)
             context.drawImage(this.sprite,this.chargingFrames[this.frame][0],this.chargingFrames[this.frame][1],30, 35,this.coordX,this.coordY, 50, 50);
         
