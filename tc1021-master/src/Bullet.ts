@@ -1,4 +1,5 @@
 import GameContext from "./GameContext"
+// @ts-ignore
 import BulletSprite from "./assets/bulllet/energy_effect_base.png"
 import Engine from "./Engine";
 import GameOverScene from "./GameOverScene"

@@ -1,10 +1,14 @@
-import GameContext from "./GameContext"
+// @ts-ignore
 import CatWarlockSprite from "./assets/cat2_base.png"
+// @ts-ignore
+import ignition from "./assets/flame.ogg"
+
+import GameContext from "./GameContext"
 import Engine from "./Engine";
 import GameOverScene from "./GameOverScene"
 import Bullet from "./Bullet"
 import Enemigo from "./Enemigo"
-import ignition from "./assets/flame.ogg"
+
 
 class CatWarlock{
     

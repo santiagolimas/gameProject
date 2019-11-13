@@ -1,4 +1,5 @@
 import GameContext from "./GameContext"
+// @ts-ignore
 import MinotaurSheet from "./assets/minotaur.png"
 import Engine from "./Engine";
 import GameOverScene from "./GameOverScene"

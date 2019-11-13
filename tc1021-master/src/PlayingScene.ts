@@ -3,14 +3,17 @@ import Engine from "./Engine"
 import MainMenuScene from "./MainMenuScene"
 import GameContext from "./GameContext"
 import Enemigo from "./Enemigo"
+// @ts-ignore
 import selection from "./assets/Menu Selection Click.wav"
 import CatWarlock from "./CatWarlock"
 import Bullet from "./Bullet"
 import VictoryScene from "./VictoryScene"
+// @ts-ignore
 import CatWarlockSprite from "./assets/cat2_base.png"
 import GameOverScene from "./GameOverScene"
 import CreditsScene from "./CreditsScene"
 import Minotauro from "./Minotauro"
+import Snake from "./Snake"
 
 class PlayingScene extends Scene {
 
@@ -35,7 +38,8 @@ class PlayingScene extends Scene {
     private direccion = 1;
     private coordX = 0;
     //private enemigos = [new Enemigo(),new Enemigo(),new Enemigo(),new Enemigo(),new Enemigo()];
-    private enemigos = [new Minotauro(),new Minotauro(),new Minotauro(),new Minotauro(),new Minotauro()];
+    //private enemigos = [new Minotauro(),new Minotauro(),new Minotauro(),new Minotauro(),new Minotauro()];
+    private enemigos = [new Snake(),new Snake(),new Snake(),new Snake(),new Snake()];
     private statusenemigos = [false,false,false,false,false]
     private torres: CatWarlock[] = [];
     private statustorres = [];
@@ -207,7 +211,7 @@ class PlayingScene extends Scene {
                 }
                 if(y != -1){
                     this.statusenemigos[y] = true;
-                    this.enemigos[y] = new Minotauro();
+                    this.enemigos[y] = new Snake();
                 }
                 this.ticks = 0;
             }

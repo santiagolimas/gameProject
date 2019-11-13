@@ -4,6 +4,7 @@ import Engine from "./Engine"
 import PlayingScene from "./PlayingScene"
 import VictoryScene from "./VictoryScene"
 import GameOverScene from "./GameOverScene"
+// @ts-ignore
 import selection from "./assets/Menu Selection Click.wav"
 import CreditsScene from "./CreditsScene"
 

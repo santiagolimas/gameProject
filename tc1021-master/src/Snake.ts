@@ -1,30 +1,33 @@
 import GameContext from "./GameContext"
 // @ts-ignore
-import EnemigoWalk from "./assets/mon2_sprite_base.png"
+import SnakeSheet from "./assets/snakeSpritesheet.png"
 import Engine from "./Engine";
 import GameOverScene from "./GameOverScene"
 
-class Enemigo{
+class Snake{
+    //atributos
     private vidaTotal = 1000;
     private vidaRestante = 1000;
     private coordX = 1000;
     private coordY = 0;
+    //propiedades
     private widthEnemy = 50;
     private heightEnemy = 50;
+    measurementsEnemy = [this.widthEnemy,this.heightEnemy];
+    //animaciones
     private frame = 0;
     private sprite = new Image();
     private counter = 0;
-    private walkingframes = [[22,84],[89,84],[151,84],[211,84]]
-    private waitingframe = [210,20];
-    private attackingframes = [[22,148],[86,148],[145,148],[215,148],[215,150],[215,148],[215,146]];
-    private dyingframes = [[20,210],[80,210],[140,210],[200,210],[266,210],[337,210],[400,210]];
-    private HealthCounter = 0;
     private stance = 0;
-    private status = true;
     private wakeup = 0;
-
+    private walkingframes = [[298,84],[264,84],[231,84],[264,84],[200,84],[170,84],[140,84],[106,84],[74,84],[42,84],[11,84]]
+    private waitingframe = [[203,56],[170,56],[140,56],[106,56]];
+    private attackingframes = [[298,115],[267,115],[234,115],[200,115],[170,115],[136,115],[106,115],[75,115],[42,115],[8,115]];
+    private dyingframes = [[298,147],[266,147],[235,147],[203,147],[172,147],[140,147],[105,147],[73,147],[40,147],[6,147]];
+    //gameplay
+    private HealthCounter = 0;
+    private status = true;
     position = [this.coordX,this.coordY];
-    measurementsEnemy = [this.widthEnemy,this.heightEnemy];
     
     public collisionEnemigo(){
         if(this.vidaRestante > 0){
@@ -60,13 +63,15 @@ class Enemigo{
         this.frame = 0;
         this.stance = 0;
         this.status = true;
-        this.sprite.src = EnemigoWalk;
+        this.sprite.src = SnakeSheet;
 
         
     }
 
     public walk(number){
         this.stance = 4;
+        this.frame = 0;
+        this.counter = 0;
         this.wakeup = number;
     }
 
@@ -86,9 +91,9 @@ class Enemigo{
             }
         }
         if(this.stance == 0){
-            if(this.counter == 30){
+            if(this.counter == 15){
                 this.frame++;
-                if(this.frame > 3){
+                if(this.frame > 10){
                     this.frame = 0;
                 }
                 this.counter = 0;
@@ -97,16 +102,12 @@ class Enemigo{
             this.coordX -= .5;
         }
         else if(this.stance == 1){
-            if(this.counter == 7 && this.frame < 3){
+            if(this.counter == 7 && this.frame < 9){
                 this.frame++;
                 this.counter = 0;
             }
-            else if(this.counter == 7 && this.frame < 6){
-                this.frame++;
-                this.counter = 0;
-            }
-            else if(this.counter == 7 && this.frame == 6){
-                this.frame = 3;
+            else if(this.counter == 7 && this.frame == 9){
+                this.frame = 0;
                 this.counter = 0;
             }
             this.counter++;
@@ -116,8 +117,19 @@ class Enemigo{
                 this.frame++;
                 this.counter = 0;
             }
-            if(this.frame == 6){
+            if(this.frame == 9){
                 this.status = false;
+            }
+            this.counter++;
+        }
+        else if(this.stance == 4){
+            if(this.counter == 20 && this.frame < 3){
+                this.frame++;
+                this.counter = 0;
+            }
+            if(this.counter == 20 && this.frame == 3){
+                this.frame = 0;
+                this.counter = 0;
             }
             this.counter++;
         }
@@ -155,7 +167,7 @@ class Enemigo{
             context.beginPath();
             context.translate(this.coordX + 50,height/2 - 25);
             context.scale(-1,1);
-            context.drawImage(this.sprite,this.walkingframes[this.frame][0],this.walkingframes[this.frame][1],27, 42,0,0, 50, 50)
+            context.drawImage(this.sprite,this.walkingframes[this.frame][0],this.walkingframes[this.frame][1],16,15,0,0, 50, 50)
             context.closePath();
             context.restore();
         }
@@ -164,7 +176,7 @@ class Enemigo{
             context.beginPath();
             context.translate(this.coordX + 50,height/2 - 25);
             context.scale(-1,1);
-            context.drawImage(this.sprite,this.attackingframes[this.frame][0],this.attackingframes[this.frame][1],32, 41,0,0, 50, 50)
+            context.drawImage(this.sprite,this.attackingframes[this.frame][0],this.attackingframes[this.frame][1],20,17,0,0, 50, 50)
             context.closePath();
             context.restore();
         }
@@ -173,7 +185,7 @@ class Enemigo{
             context.beginPath();
             context.translate(this.coordX + 50,height/2 - 25);
             context.scale(-1,1);
-            context.drawImage(this.sprite,this.dyingframes[this.frame][0],this.dyingframes[this.frame][1],40, 45,0,0, 50, 50)
+            context.drawImage(this.sprite,this.dyingframes[this.frame][0],this.dyingframes[this.frame][1],18,18,0,0, 50, 50)
             context.closePath();
             context.restore();
         }
@@ -182,17 +194,10 @@ class Enemigo{
             context.beginPath();
             context.translate(this.coordX + 50,height/2 - 25);
             context.scale(-1,1);
-            context.drawImage(this.sprite,this.waitingframe[0],this.waitingframe[1],28, 42,0,0, 50, 50)
+            context.drawImage(this.sprite,this.waitingframe[this.frame][0],this.waitingframe[this.frame][1],16,15,0,0, 50, 50)
             context.closePath();
             context.restore();
         }
-
-        // context.save();
-        // context.beginPath();
-        // context.fillStyle = this.barColor;
-        // context.fillRect(this.coordX, height / 2 - 45, 50, 10)
-        // context.closePath();
-        // context.restore();
     }
 
     public getEnemyCoordinates = () => {
@@ -209,4 +214,4 @@ class Enemigo{
 
 }
 
-export default Enemigo;
+export default Snake;

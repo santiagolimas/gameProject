@@ -3,7 +3,9 @@ import GameContext from "./GameContext"
 import Engine from "./Engine"
 import PlayingScene from "./PlayingScene"
 import MainMenuScene from "./MainMenuScene"
+// @ts-ignore
 import Skull from "./assets/mon2_sprite_base.png"
+// @ts-ignore
 import selection from "./assets/Menu Selection Click.wav"
 
 
