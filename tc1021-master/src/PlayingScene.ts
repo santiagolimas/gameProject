@@ -10,6 +10,7 @@ import VictoryScene from "./VictoryScene"
 import CatWarlockSprite from "./assets/cat2_base.png"
 import GameOverScene from "./GameOverScene"
 import CreditsScene from "./CreditsScene"
+import Minotauro from "./Minotauro"
 
 class PlayingScene extends Scene {
 
@@ -33,7 +34,8 @@ class PlayingScene extends Scene {
     private paused = false
     private direccion = 1;
     private coordX = 0;
-    private enemigos = [new Enemigo(),new Enemigo(),new Enemigo(),new Enemigo(),new Enemigo()];
+    //private enemigos = [new Enemigo(),new Enemigo(),new Enemigo(),new Enemigo(),new Enemigo()];
+    private enemigos = [new Minotauro(),new Minotauro(),new Minotauro(),new Minotauro(),new Minotauro()];
     private statusenemigos = [false,false,false,false,false]
     private torres: CatWarlock[] = [];
     private statustorres = [];
@@ -205,7 +207,7 @@ class PlayingScene extends Scene {
                 }
                 if(y != -1){
                     this.statusenemigos[y] = true;
-                    this.enemigos[y] = new Enemigo();
+                    this.enemigos[y] = new Minotauro();
                 }
                 this.ticks = 0;
             }
