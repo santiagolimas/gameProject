@@ -2,7 +2,7 @@ import Scene from "./Scene"
 import Engine from "./Engine"
 import MainMenuScene from "./MainMenuScene"
 import GameContext from "./GameContext"
-import Enemigo from "./Enemigo"
+import Zombie from "./Zombie"
 // @ts-ignore
 import selection from "./assets/Menu Selection Click.wav"
 import CatWarlock from "./CatWarlock"
@@ -29,7 +29,7 @@ class PlayingScene extends Scene {
     private constructing = false;
     private mouseX = 0;
     private mouseY = 0;
-    private enemigosFaltantes = 5;
+    private enemigosFaltantes = 20;
 
     private buttonPressed = false
     //Enemy characteristics
@@ -37,10 +37,10 @@ class PlayingScene extends Scene {
     private paused = false
     private direccion = 1;
     private coordX = 0;
-    //private enemigos = [new Enemigo(),new Enemigo(),new Enemigo(),new Enemigo(),new Enemigo()];
+    private enemigos = [new Zombie(),new Zombie(),new Zombie(),new Zombie(),new Zombie()];
     //private enemigos = [new Minotauro(),new Minotauro(),new Minotauro(),new Minotauro(),new Minotauro()];
-    private enemigos = [new Snake(),new Snake(),new Snake(),new Snake(),new Snake()];
-    private statusenemigos = [false,false,false,false,false]
+    private statusenemigos = [false,false,false,false,false];
+    private tipoenemigo =[0,0,0,0,0];
     private torres: CatWarlock[] = [];
     private statustorres = [];
     private ticks = 0;
@@ -196,7 +196,7 @@ class PlayingScene extends Scene {
     public update = (engine: Engine) => {
         const context = GameContext.context;
         const width = context.canvas.width;
-        if(this.deadEnemies == 5){
+        if(this.deadEnemies == this.enemigosFaltantes){
             engine.setCurrentScene(new VictoryScene())
         }
 
@@ -211,7 +211,19 @@ class PlayingScene extends Scene {
                 }
                 if(y != -1){
                     this.statusenemigos[y] = true;
-                    this.enemigos[y] = new Snake();
+                    let tipo = Math.ceil(Math.random()*3) + 1;
+                    this.tipoenemigo[y] = tipo;
+                    switch(tipo){
+                        case 1:
+                            this.enemigos[y] = new Zombie();
+                            break;
+                        case 2:
+                            this.enemigos[y] = new Minotauro();
+                            break;
+                        case 3:
+                            this.enemigos[y] = new Snake();
+                            break;
+                    }
                 }
                 this.ticks = 0;
             }
@@ -300,7 +312,7 @@ class PlayingScene extends Scene {
                         this.torres[i].collisionTorre();
                         this.enemigos[j].collisionTorre();
                         if(this.torres[i].getStatus() == false){
-                            this.enemigos[j].walk(0);
+                            this.enemigos[j].walk(1);
                         }
                         this.statustorres[i] = this.torres[i].getStatus();
                         if(this.statustorres[i] == false){

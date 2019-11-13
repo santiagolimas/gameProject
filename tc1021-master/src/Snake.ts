@@ -6,8 +6,8 @@ import GameOverScene from "./GameOverScene"
 
 class Snake{
     //atributos
-    private vidaTotal = 1000;
-    private vidaRestante = 1000;
+    private vidaTotal = 150;
+    private vidaRestante = 150;
     private coordX = 1000;
     private coordY = 0;
     //propiedades
@@ -44,7 +44,7 @@ class Snake{
     }
 
     public collisionTorre(){
-        if(this.stance != 1){
+        if(this.stance != 1 && this.stance != 2){
             this.stance = 1;
             this.frame = 0;
             this.counter = 0;
@@ -55,10 +55,10 @@ class Snake{
         const context = GameContext.context;
         const height = context.canvas.height;
         const width = context.canvas.width
-        this.vidaTotal = 1000;
-        this.vidaRestante = 1000;
+        this.vidaTotal = 300;
+        this.vidaRestante = 300;
 
-        this.coordX = width + 50;
+        this.coordX = width;
         this.coordY = (height / 2) - 25;
         this.frame = 0;
         this.stance = 0;
@@ -69,10 +69,12 @@ class Snake{
     }
 
     public walk(number){
-        this.stance = 4;
-        this.frame = 0;
-        this.counter = 0;
-        this.wakeup = number;
+        if(this.stance != 2){
+            this.stance = 4;
+            this.frame = 0;
+            this.counter = 0;
+            this.wakeup = number;
+        }
     }
 
     public update(){
@@ -99,7 +101,7 @@ class Snake{
                 this.counter = 0;
                 }
             this.counter++;
-            this.coordX -= .5;
+            this.coordX -= 3;
         }
         else if(this.stance == 1){
             if(this.counter == 7 && this.frame < 9){

@@ -44,7 +44,7 @@ class Minotauro{
     }
 
     public collisionTorre(){
-        if(this.stance != 1){
+        if(this.stance != 1 && this.stance != 2){
             this.stance = 1;
             this.frame = 0;
             this.counter = 0;
@@ -58,7 +58,7 @@ class Minotauro{
         this.vidaTotal = 1000;
         this.vidaRestante = 1000;
 
-        this.coordX = width + 50;
+        this.coordX = width;
         this.coordY = (height / 2) - 25;
         this.frame = 0;
         this.stance = 0;
@@ -69,19 +69,23 @@ class Minotauro{
     }
 
     public walk(number){
-        this.stance = 4;
-        this.frame = 0;
-        this.counter = 0;
-        this.wakeup = number;
+        if(this.stance != 2){
+            this.stance = 4;
+            this.frame = 0;
+            this.counter = 0;
+            this.wakeup = number;
+        }
     }
 
     public update(){
+        //contador interno desde la ultima vez que fue golpeado
         if(this.HealthCounter > 0){
             this.HealthCounter++;
         }
         if(this.HealthCounter > 60){
             this.HealthCounter = 0;
         }
+        //funcion que hace que no caminen todos al mismo tiempo tras matar a un enemigo
         if(this.wakeup > 0){
             this.wakeup--;
             if(this.wakeup == 0){
@@ -90,6 +94,7 @@ class Minotauro{
                 this.counter = 0;
             }
         }
+        //Update cuando camina
         if(this.stance == 0){
             if(this.counter == 30){
                 this.frame++;
@@ -101,6 +106,7 @@ class Minotauro{
             this.counter++;
             this.coordX -= .5;
         }
+        //update cuando ataca
         else if(this.stance == 1){
             if(this.counter == 7 && this.frame < 10){
                 this.frame++;
@@ -112,6 +118,7 @@ class Minotauro{
             }
             this.counter++;
         }
+        //update cuando muere
         else if(this.stance == 2){
             if(this.counter == 7){
                 this.frame++;
@@ -122,6 +129,7 @@ class Minotauro{
             }
             this.counter++;
         }
+        //update cuando espera
         else if(this.stance == 4){
             if(this.counter == 20 && this.frame < 2){
                 this.frame++;
@@ -146,7 +154,7 @@ class Minotauro{
         const context = GameContext.context;
         const height = context.canvas.height;
         const width = context.canvas.width
-
+        //solo muestra la vida despues de ser golpeado
         if(this.HealthCounter > 0){
             context.save();
             context.beginPath();
@@ -161,7 +169,7 @@ class Minotauro{
             context.closePath();
             context.restore();
         }
-
+        //render cuando camina
         if(this.stance == 0){
             context.save();
             context.beginPath();
@@ -171,6 +179,7 @@ class Minotauro{
             context.closePath();
             context.restore();
         }
+        //render cuando ataca
         else if(this.stance == 1){
             context.save();
             context.beginPath();
@@ -180,6 +189,7 @@ class Minotauro{
             context.closePath();
             context.restore();
         }
+        //render cuando muere
         else if(this.stance == 2){
             context.save();
             context.beginPath();
@@ -189,6 +199,7 @@ class Minotauro{
             context.closePath();
             context.restore();
         }
+        //render cuando espera
         else if(this.stance == 4){
             context.save();
             context.beginPath();
@@ -198,13 +209,6 @@ class Minotauro{
             context.closePath();
             context.restore();
         }
-
-        // context.save();
-        // context.beginPath();
-        // context.fillStyle = this.barColor;
-        // context.fillRect(this.coordX, height / 2 - 45, 50, 10)
-        // context.closePath();
-        // context.restore();
     }
 
     public getEnemyCoordinates = () => {

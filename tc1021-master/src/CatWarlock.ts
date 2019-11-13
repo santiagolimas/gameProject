@@ -7,7 +7,7 @@ import GameContext from "./GameContext"
 import Engine from "./Engine";
 import GameOverScene from "./GameOverScene"
 import Bullet from "./Bullet"
-import Enemigo from "./Enemigo"
+import Enemigo from "./Zombie"
 
 
 class CatWarlock{
@@ -51,9 +51,6 @@ class CatWarlock{
 
 
     constructor(coordX, coordY){
-        const context = GameContext.context;
-        const height = context.canvas.height;
-        const width = context.canvas.width
         this.vidaTotal = 1000;
         this.vidaRestante = 1000;
         this.coordX = coordX;
@@ -156,10 +153,10 @@ class CatWarlock{
                 //A.Bottom < B.Top
 
                 if(leftA < rightB && rightA > leftB &&
-                    topA < bottomB && bottomA > topB && statusEnemies[j] && this.statusBullets[i]){
+                    topA < bottomB && bottomA > topB && statusEnemies[j] 
+                    && this.statusBullets[i] && arrayEnemies[j].getHealth() > 0 && leftB < GameContext.context.canvas.width){
                         this.bullets[i].collisionBullet();
                         arrayEnemies[j].collisionEnemigo();
-                        // console.log("Collision occured" + " " + i + " " + j)
                         break;
             
                 }
@@ -206,14 +203,6 @@ class CatWarlock{
             context.closePath();
             context.restore();
         }
-
-
-        // context.save();
-        // context.beginPath();
-        // context.fillStyle = this.barColor;
-        // context.fillRect(this.coordX, height / 2 - 45, 50, 10)
-        // context.closePath();
-        // context.restore();
     }
 
     public getCatWarlockCoordinates = () => {

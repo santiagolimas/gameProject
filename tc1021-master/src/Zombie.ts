@@ -4,9 +4,9 @@ import EnemigoWalk from "./assets/mon2_sprite_base.png"
 import Engine from "./Engine";
 import GameOverScene from "./GameOverScene"
 
-class Enemigo{
-    private vidaTotal = 1000;
-    private vidaRestante = 1000;
+class Zombie{
+    private vidaTotal = 300;
+    private vidaRestante = 300;
     private coordX = 1000;
     private coordY = 0;
     private widthEnemy = 50;
@@ -41,7 +41,7 @@ class Enemigo{
     }
 
     public collisionTorre(){
-        if(this.stance != 1){
+        if(this.stance != 1 && this.stance != 2){
             this.stance = 1;
             this.frame = 0;
             this.counter = 0;
@@ -52,10 +52,10 @@ class Enemigo{
         const context = GameContext.context;
         const height = context.canvas.height;
         const width = context.canvas.width
-        this.vidaTotal = 1000;
-        this.vidaRestante = 1000;
+        this.vidaTotal = 500;
+        this.vidaRestante = 500;
 
-        this.coordX = width + 50;
+        this.coordX = width;
         this.coordY = (height / 2) - 25;
         this.frame = 0;
         this.stance = 0;
@@ -66,8 +66,10 @@ class Enemigo{
     }
 
     public walk(number){
-        this.stance = 4;
-        this.wakeup = number;
+        if(this.stance != 2){
+            this.stance = 4;
+            this.wakeup = number;
+        }
     }
 
     public update(){
@@ -94,7 +96,7 @@ class Enemigo{
                 this.counter = 0;
                 }
             this.counter++;
-            this.coordX -= .5;
+            this.coordX -= 1.5;
         }
         else if(this.stance == 1){
             if(this.counter == 7 && this.frame < 3){
@@ -186,13 +188,6 @@ class Enemigo{
             context.closePath();
             context.restore();
         }
-
-        // context.save();
-        // context.beginPath();
-        // context.fillStyle = this.barColor;
-        // context.fillRect(this.coordX, height / 2 - 45, 50, 10)
-        // context.closePath();
-        // context.restore();
     }
 
     public getEnemyCoordinates = () => {
@@ -209,4 +204,4 @@ class Enemigo{
 
 }
 
-export default Enemigo;
+export default Zombie;
