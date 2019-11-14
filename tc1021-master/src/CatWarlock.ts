@@ -34,8 +34,20 @@ class CatWarlock{
     private bullets = [];
     private statusBullets = [];
 
-    public collisionTorre(){
-        this.vidaRestante -= 1;
+    public collisionTorre(tipo){
+        console.log(tipo);
+        switch(tipo){
+            case 1:
+                this.vidaRestante -= 3;
+                break;
+            case 2:
+                this.vidaRestante -= 10;
+                break;
+            case 3:
+                this.vidaRestante--;
+                break;
+
+        }
  
         if(this.vidaRestante <= 0){
             this.status = false;

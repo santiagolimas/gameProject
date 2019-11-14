@@ -15,8 +15,28 @@ import CreditsScene from "./CreditsScene"
 import Minotauro from "./Minotauro"
 import Snake from "./Snake"
 
-class PlayingScene extends Scene {
+// @ts-ignore
+import background1 from "./assets/BG/battleback1.png"
+// @ts-ignore
+import background2 from "./assets/BG/battleback2.png"
+// @ts-ignore
+import background3 from "./assets/BG/battleback3.png"
+// @ts-ignore
+import background4 from "./assets/BG/battleback4.png"
+// @ts-ignore
+import background5 from "./assets/BG/battleback5.png"
+// @ts-ignore
+import background6 from "./assets/BG/battleback6.png"
+// @ts-ignore
+import background7 from "./assets/BG/battleback7.png"
+// @ts-ignore
+import background8 from "./assets/BG/battleback8.png"
+// @ts-ignore
+import background9 from "./assets/BG/battleback9.png"
+// @ts-ignore
+import background10 from "./assets/BG/battleback10.png"
 
+class PlayingScene extends Scene {
     //Button characteristics
     private widthButton = 150;
     private heightButton = 80;
@@ -30,27 +50,22 @@ class PlayingScene extends Scene {
     private mouseX = 0;
     private mouseY = 0;
     private enemigosFaltantes = 20;
-
     private buttonPressed = false
-    //Enemy characteristics
-
     private paused = false
     private direccion = 1;
     private coordX = 0;
     private enemigos = [new Zombie(),new Zombie(),new Zombie(),new Zombie(),new Zombie()];
-    //private enemigos = [new Minotauro(),new Minotauro(),new Minotauro(),new Minotauro(),new Minotauro()];
     private statusenemigos = [false,false,false,false,false];
     private tipoenemigo =[0,0,0,0,0];
     private torres: CatWarlock[] = [];
     private statustorres = [];
     private ticks = 0;
     private catWarlock = new CatWarlock(0,0);
-
     private currentOption: number = 0
     private options = ["Reanudar juego","Reiniciar juego","Menú principal","Créditos"]
     private selectionSound = new Audio(selection);
     private playSound = false
-
+    private background = new Image();
 
      //todo Variables para botones de interfaz de pausa
      private widthCanvas = GameContext.context.canvas.width;
@@ -84,16 +99,25 @@ class PlayingScene extends Scene {
         const context = GameContext.context;
         const height = context.canvas.height;
         const width = context.canvas.width
+
         context.save();
         context.beginPath();
-        context.fillStyle = "black";
-        context.fillRect(0, height/2 - 26, width,1)
-        context.fillRect(0, height/2 + 26, width,1)
+        context.drawImage(this.background,0,0,width,height)
         context.closePath();
         context.restore();
+        
+        if(this.constructing){
+            context.save();
+            context.beginPath();
+            context.fillStyle = "black";
+            context.fillRect(0, height/2 - 26, width,1)
+            context.fillRect(0, height/2 + 26, width,1)
+            context.closePath();
+            context.restore();
+        }
 
         context.save()
-        context.font = "40px sans-serif"
+        context.font = "55px bold sans-serif"
         context.fillStyle = "black"
         context.textAlign = "center"
         context.lineWidth = 1.8;
@@ -211,7 +235,7 @@ class PlayingScene extends Scene {
                 }
                 if(y != -1){
                     this.statusenemigos[y] = true;
-                    let tipo = Math.ceil(Math.random()*3) + 1;
+                    let tipo = Math.ceil(Math.random()*3);
                     this.tipoenemigo[y] = tipo;
                     switch(tipo){
                         case 1:
@@ -309,7 +333,7 @@ class PlayingScene extends Scene {
                     topA < bottomB && bottomA > topB && this.statustorres[i] && this.statusenemigos[j]){
                       
                         console.log("collision occurred")
-                        this.torres[i].collisionTorre();
+                        this.torres[i].collisionTorre(this.tipoenemigo[j]);
                         this.enemigos[j].collisionTorre();
                         if(this.torres[i].getStatus() == false){
                             this.enemigos[j].walk(1);
@@ -351,6 +375,39 @@ class PlayingScene extends Scene {
         for(let x = 0; x < 24; x++){
             this.torres.push(new CatWarlock(x*50,0));
             this.statustorres.push(false);
+        }
+        let bg = Math.ceil(Math.random()*10);
+        switch(bg){
+            case 1:
+                this.background.src = background1;
+                break;
+            case 2:
+                this.background.src = background2;
+                break;
+            case 3:
+                this.background.src = background3;
+                break;
+            case 4:
+                this.background.src = background4;
+                break;
+            case 5:
+                this.background.src = background5;
+                break;
+            case 6:
+                this.background.src = background6;
+                break;
+            case 7:
+                this.background.src = background7;
+                break;
+            case 8:
+                this.background.src = background8;
+                break;
+            case 9:
+                this.background.src = background9;
+                break;
+            case 10:
+                this.background.src = background10;
+                break;
         }
     }
 
