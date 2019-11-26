@@ -6,8 +6,10 @@ import VictoryScene from "./VictoryScene"
 import GameOverScene from "./GameOverScene"
 // @ts-ignore
 import selection from "./assets/Menu Selection Click.wav"
-import backgroundMusic from "./assets/menuPrincipal_music.mp3"
+import backgroundMusic from "./assets/menuPrincipal_music2.wav"
 import CreditsScene from "./CreditsScene"
+
+import menuBackground from "./assets/BG/menuBackground.png"
 
 class MainMenuScene extends Scene {
 
@@ -32,13 +34,20 @@ class MainMenuScene extends Scene {
 
     private mousePressed = false
     private playSound = false
-
+    private background = new Image()
     public enter = () => {}
 
     public render = () => {
         const context = GameContext.context;
         const width = context.canvas.width
         const height = context.canvas.height
+
+        this.background.src = menuBackground;
+        context.save();
+        context.beginPath();
+        context.drawImage(this.background,0,0,width,height)
+        context.closePath();
+        context.restore();
 
         if(this.playBackSound){
             this.backgroundSound.play()

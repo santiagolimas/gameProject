@@ -14,6 +14,7 @@ import GameOverScene from "./GameOverScene"
 import CreditsScene from "./CreditsScene"
 import Minotauro from "./Minotauro"
 import Snake from "./Snake"
+import backgroundMenuMusic from "./assets/The Last Encounter (Digitalized Version).mp3"
 
 // @ts-ignore
 import background1 from "./assets/BG/battleback1.png"
@@ -37,6 +38,10 @@ import background9 from "./assets/BG/battleback9.png"
 import background10 from "./assets/BG/battleback10.png"
 
 class PlayingScene extends Scene {
+
+    //Background music
+    private backgroundMusic = new Audio(backgroundMenuMusic);
+
     //Button characteristics
     private widthButton = 150;
     private heightButton = 80;
@@ -44,7 +49,7 @@ class PlayingScene extends Scene {
     private buttonColor = "gray"
     //gameplay
     private deadEnemies = 0;
-    private enemigosFaltantes = 20;
+    private enemigosFaltantes = 1;
     private constructionTimer = 0;
     private previewAsset = [[20,150]];
     private constructing = false;
@@ -94,7 +99,9 @@ class PlayingScene extends Scene {
         const context = GameContext.context;
         const height = context.canvas.height;
         const width = context.canvas.width
-        //background
+        //background music
+
+        //background image
         context.save();
         context.beginPath();
         context.drawImage(this.background,0,0,width,height)
@@ -165,6 +172,8 @@ class PlayingScene extends Scene {
 
         //EMPIEZA INTERFAZ DE PAUSA
         if(this.paused){
+        this.backgroundMusic.pause()
+
         //el efecto de la pausa
         context.save()
         context.beginPath()
@@ -208,12 +217,17 @@ class PlayingScene extends Scene {
         //constantes
         const context = GameContext.context;
         const width = context.canvas.width;
-        //si se cumplio el objetivo pasa a la siguiente escena
-        if(this.deadEnemies == this.enemigosFaltantes){
-            engine.setCurrentScene(new VictoryScene())
-        }
+       
         //solo trabaja si no esta pausado el juego
         if(!this.paused){
+            this.backgroundMusic.play()
+
+            //si se cumplio el objetivo pasa a la siguiente escena
+            if(this.deadEnemies == this.enemigosFaltantes){
+                this.backgroundMusic.pause()
+                engine.setCurrentScene(new VictoryScene())
+            }
+
             //genera los enemigos en un intervalo aleatorio entre 200 y 800 ticks
             let rand = Math.ceil(Math.random()*600) + 200;
             //si es en el intervalo aleatorio o supero el parametro superior genera un enemigo
@@ -261,6 +275,7 @@ class PlayingScene extends Scene {
                         this.enemigos[x].update();
                         //si cruzo el lado izquierdo el jugador pierde
                         if(this.enemigos[x].getEnemyCoordinates()[0] <= 0){
+                            this.backgroundMusic.pause()
                             engine.setCurrentScene(new GameOverScene());
                         }
                     }
@@ -404,6 +419,7 @@ class PlayingScene extends Scene {
         const { key } = event;
         //si se presiona la p se pausa el juego
         if(event.key == "p" || event.key == "P"){
+
             if(this.paused){
                 this.paused = false;
             }
@@ -413,6 +429,7 @@ class PlayingScene extends Scene {
         }
         //si el juego esta pausado interactua con el menu de pausa
          if(this.paused){
+
             switch(event.key){
                 //preseleciona otro boton
                 case "ArrowUp":
@@ -549,16 +566,19 @@ class PlayingScene extends Scene {
             else if(event.offsetX >= this.positionButton2[0] && ( event.offsetX <= (this.positionButton2[0] + this.widthButton2) )
             && event.offsetY >= this.positionButton2[1] && ( event.offsetY <= (this.positionButton2[1] + this.heightButton2) ) 
             ){
+                this.backgroundMusic.pause()
                 engine.setCurrentScene(new PlayingScene())
             }
             else if(event.offsetX >= this.positionButton3[0] && ( event.offsetX <= (this.positionButton3[0] + this.widthButton3) )
             && event.offsetY >= this.positionButton3[1] && ( event.offsetY <= (this.positionButton3[1] + this.heightButton3) ) 
             ){
+                this.backgroundMusic.pause()
                 engine.setCurrentScene(new MainMenuScene())
             }
             else if(event.offsetX >= this.positionButton4[0] && ( event.offsetX <= (this.positionButton4[0] + this.widthButton4) )
             && event.offsetY >= this.positionButton4[1] && ( event.offsetY <= (this.positionButton4[1] + this.heightButton4) ) 
             ){
+                this.backgroundMusic.pause()
                 engine.setCurrentScene(new CreditsScene());
            }
            else{

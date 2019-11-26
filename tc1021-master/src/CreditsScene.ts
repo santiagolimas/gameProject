@@ -3,7 +3,9 @@ import GameContext from "./GameContext"
 import Engine from "./Engine"
 import PlayingScene from "./PlayingScene"
 import MainMenuScene from "./MainMenuScene"
-import creditsBackground from "./assets/BG/creditsBg.png
+import creditsBackground from "./assets/BG/menuBackground.png"
+import backgroundCreditsMusic from "./assets/Caketown 1.mp3"
+
 
 class CreditsScene extends Scene {
 
@@ -15,17 +17,19 @@ class CreditsScene extends Scene {
                       ,[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2+60]]
 
     private background = new Image();
+    private backgroundSound = new Audio(backgroundCreditsMusic);
 
     public enter = () => {}
     public render = () => {
+
+        this.backgroundSound.play();
         //constantes del canvas
         const context = GameContext.context;
         const width = context.canvas.width
         const height = context.canvas.height
 
-        this.background.src = creditsBackground;
-
         //background
+        this.background.src = creditsBackground;
          context.save();
          context.beginPath();
          context.drawImage(this.background,0,0,width,height)
@@ -61,6 +65,7 @@ class CreditsScene extends Scene {
         const key = event.key
 
        if(key == "Enter"){
+        this.backgroundSound.pause();
            engine.setCurrentScene( new MainMenuScene());
        }
 

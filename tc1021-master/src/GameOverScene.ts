@@ -8,6 +8,9 @@ import Skull from "./assets/mon2_sprite_base.png"
 // @ts-ignore
 import selection from "./assets/Menu Selection Click.wav"
 
+import backgroundGameOverMusic from "./assets/The Dark Amulet.mp3"
+import gameOverBackground from "./assets/BG/gameOver2.png"
+
 
 class GameOverScene extends Scene {
 
@@ -24,6 +27,9 @@ class GameOverScene extends Scene {
     private selectionSound = new Audio(selection);
     private playSound = false
 
+    private backgroundSound = new Audio(backgroundGameOverMusic);
+    private background = new Image()
+
     public enter = () => {
         this.sprite.src = Skull;
     }
@@ -31,6 +37,15 @@ class GameOverScene extends Scene {
         const context = GameContext.context;
         const width = context.canvas.width
         const height = context.canvas.height
+
+        this.backgroundSound.play();
+
+        this.background.src = gameOverBackground;
+        context.save();
+        context.beginPath();
+        context.drawImage(this.background,0,0,width,height)
+        context.closePath();
+        context.restore();
 
         context.save();
         context.beginPath();
@@ -110,7 +125,8 @@ class GameOverScene extends Scene {
                 break;
             case "Enter":
                 if(this.currentOption === 0){
-            engine.setCurrentScene(new PlayingScene());
+                    this.backgroundSound.pause();
+                    engine.setCurrentScene(new PlayingScene());
                 }
                 
                 break;
@@ -153,10 +169,12 @@ class GameOverScene extends Scene {
         if(event.offsetX >= this.buttons[0][0] && ( event.offsetX <= (this.buttons[0][0] + 400) )
         && event.offsetY >= this.buttons[0][1] && ( event.offsetY <= (this.buttons[0][1] + 100) )
         ){
+            this.backgroundSound.pause();
             engine.setCurrentScene(new PlayingScene())
          }
         else if(event.offsetX >= this.buttons[1][0] && ( event.offsetX <= (this.buttons[1][0] + 400) )
         && event.offsetY >= this.buttons[1][1] && ( event.offsetY <= (this.buttons[1][1] + 100) )){
+            this.backgroundSound.pause();
             engine.setCurrentScene(new MainMenuScene())
         }
         else{

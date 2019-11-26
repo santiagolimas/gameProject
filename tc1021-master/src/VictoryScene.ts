@@ -8,6 +8,9 @@ import selection from "./assets/Menu Selection Click.wav"
 // @ts-ignore
 import cat from "./assets/cat2_base.png"
 
+import backgroundVictoryMusic from "./assets/awake10_megaWall.mp3"
+import gameOverBackground from "./assets/BG/Sunrise.png"
+
 
 class VictoryScene extends Scene {
 
@@ -23,14 +26,28 @@ class VictoryScene extends Scene {
                       ,[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2+60]]
     private playSound = false
     private selectionSound = new Audio(selection);
+    private backgroundSound = new Audio(backgroundVictoryMusic);
+
+    private background = new Image()
 
     public enter = () => {
         this.sprite.src = cat;
     }
     public render = () => {
+
+
         const context = GameContext.context;
         const width = context.canvas.width
         const height = context.canvas.height
+
+        this.backgroundSound.play();
+
+        this.background.src = gameOverBackground;
+        context.save();
+        context.beginPath();
+        context.drawImage(this.background,0,0,width,height)
+        context.closePath();
+        context.restore();
 
         context.save();
         context.beginPath();
@@ -126,7 +143,8 @@ class VictoryScene extends Scene {
                 break;
             case "Enter":
                 if(this.currentOption === 0){
-            engine.setCurrentScene(new PlayingScene());
+                    this.backgroundSound.pause();
+                    engine.setCurrentScene(new PlayingScene());
                 }
                 
                 break;
@@ -171,10 +189,12 @@ class VictoryScene extends Scene {
         if(event.offsetX >= this.buttons[0][0] && ( event.offsetX <= (this.buttons[0][0] + 400) )
         && event.offsetY >= this.buttons[0][1] && ( event.offsetY <= (this.buttons[0][1] + 100) )
         ){
+            this.backgroundSound.pause();
             engine.setCurrentScene(new PlayingScene())
          }
         else if(event.offsetX >= this.buttons[1][0] && ( event.offsetX <= (this.buttons[1][0] + 400) )
         && event.offsetY >= this.buttons[1][1] && ( event.offsetY <= (this.buttons[1][1] + 100) )){
+            this.backgroundSound.pause();
             engine.setCurrentScene(new MainMenuScene())
         }
         else{
