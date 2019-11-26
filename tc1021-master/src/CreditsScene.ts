@@ -3,7 +3,7 @@ import GameContext from "./GameContext"
 import Engine from "./Engine"
 import PlayingScene from "./PlayingScene"
 import MainMenuScene from "./MainMenuScene"
-
+import creditsBackground from "./assets/BG/creditsBg.png
 
 class CreditsScene extends Scene {
 
@@ -14,11 +14,23 @@ class CreditsScene extends Scene {
     private buttons = [[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2-160]
                       ,[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2+60]]
 
+    private background = new Image();
+
     public enter = () => {}
     public render = () => {
+        //constantes del canvas
         const context = GameContext.context;
         const width = context.canvas.width
         const height = context.canvas.height
+
+        this.background.src = creditsBackground;
+
+        //background
+         context.save();
+         context.beginPath();
+         context.drawImage(this.background,0,0,width,height)
+         context.closePath();
+         context.restore();
 
         context.save()
         context.font = "50px sans-serif"

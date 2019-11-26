@@ -6,6 +6,7 @@ import VictoryScene from "./VictoryScene"
 import GameOverScene from "./GameOverScene"
 // @ts-ignore
 import selection from "./assets/Menu Selection Click.wav"
+import backgroundMusic from "./assets/menuPrincipal_music.mp3"
 import CreditsScene from "./CreditsScene"
 
 class MainMenuScene extends Scene {
@@ -13,6 +14,8 @@ class MainMenuScene extends Scene {
     private currentOption: number = 0
     private options = ["Comenzar juego","Créditos"]
     private selectionSound = new Audio(selection);
+    private backgroundSound = new Audio(backgroundMusic);
+    private playBackSound = true
 
     private widthCanvas = GameContext.context.canvas.width;
     private heightCanvas = GameContext.context.canvas.height;
@@ -37,6 +40,10 @@ class MainMenuScene extends Scene {
         const width = context.canvas.width
         const height = context.canvas.height
 
+        if(this.playBackSound){
+            this.backgroundSound.play()
+        }
+        
         context.save()
         context.beginPath()
         context.textAlign = "center"
@@ -85,9 +92,13 @@ class MainMenuScene extends Scene {
                 break;
             case "Enter":
                 if(this.currentOption === 0){
+                    this.backgroundSound.pause()
                     engine.setCurrentScene(new PlayingScene());
+
                 }
                 if(this.currentOption === 1){
+                    this.backgroundSound.pause()
+
                     engine.setCurrentScene(new CreditsScene());
                 }
                 
@@ -100,7 +111,7 @@ class MainMenuScene extends Scene {
     
 
     public mouseMoveHandler = (event) => {
-   
+    
     if(event.offsetX >= this.positionButton1[0] && ( event.offsetX <= (this.positionButton1[0] + this.widthButton1) )
       && event.offsetY >= this.positionButton1[1] && ( event.offsetY <= (this.positionButton1[1] + this.heightButton1) ) 
       ){
@@ -133,6 +144,7 @@ class MainMenuScene extends Scene {
     
     public mouseUpHandler = (event) => {
         this.mousePressed = false;
+     
     }
 
     public mouseDownHandler = (event,engine: Engine) => {
@@ -140,11 +152,15 @@ class MainMenuScene extends Scene {
         && event.offsetY >= this.positionButton1[1] && ( event.offsetY <= (this.positionButton1[1] + this.heightButton1) ) 
         ){
               engine.setCurrentScene(new PlayingScene())
+              this.backgroundSound.pause()
+
          }else if(event.offsetX >= this.positionButton2[0] && ( event.offsetX <= (this.positionButton2[0] + this.widthButton2) )
          && event.offsetY >= this.positionButton2[1] && ( event.offsetY <= (this.positionButton2[1] + this.heightButton2) )
          ){
 
             engine.setCurrentScene(new CreditsScene());
+            this.backgroundSound.pause()
+
          }else{
              this.mousePressed = false;
          }
