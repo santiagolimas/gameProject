@@ -212,7 +212,7 @@ class PlayingScene extends Scene {
         //el efecto de la pausa
         context.save()
         context.beginPath()
-        context.globalAlpha = .5
+        context.globalAlpha = .25
         context.fillStyle = "black"
         context.fillRect(0,0,width,height);
         context.closePath()
