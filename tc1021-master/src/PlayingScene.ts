@@ -49,7 +49,7 @@ class PlayingScene extends Scene {
     private buttonColor = "gray"
     //gameplay
     private deadEnemies = 0;
-    private enemigosFaltantes = 1;
+    private enemigosFaltantes = 20;
     private constructionTimer = 0;
     private previewAsset = [[20,150]];
     private constructing = false;
@@ -109,6 +109,8 @@ class PlayingScene extends Scene {
         context.restore();
         //lineas delimitadoras del path
         if(this.constructing){
+
+            //primer path
             context.save();
             context.beginPath();
             context.fillStyle = "black";
@@ -116,7 +118,18 @@ class PlayingScene extends Scene {
             context.fillRect(0, height/2 + 26, width,1)
             context.closePath();
             context.restore();
+
+            //segundo path
+            context.save();
+            context.beginPath();
+            context.fillStyle = "black";
+            context.fillRect(0, height/2 + 52, width,1)
+            context.fillRect(0, height/2 + 104, width,1)
+            context.closePath();
+            context.restore();
         }
+
+
         //texto del progreso en el nivel
         context.save()
         context.font = "55px bold sans-serif"
@@ -125,6 +138,7 @@ class PlayingScene extends Scene {
         context.lineWidth = 1.8;
         context.fillText("Enemigos faltantes: " + (this.enemigosFaltantes - this.deadEnemies),width/2 + 200,100);
         context.restore()
+
         //Boton para crear torre
         let [x, y] = this.positionButton;
         context.save();
@@ -139,6 +153,7 @@ class PlayingScene extends Scene {
         context.closePath();
         context.restore();
         context.save();
+
         //el cooldown del boton creador de gatos
         context.beginPath();
         context.fillStyle = "black";
@@ -146,8 +161,9 @@ class PlayingScene extends Scene {
         context.fillRect(x,y,this.widthButton, this.heightButton*(this.constructionTimer/240));
         context.closePath();
         context.restore();
-        //si esta dentro del path
-        if(this.mouseY >= height/2 -25 && ( this.mouseY <= height/2 + 25 ) && this.constructing){
+
+        //si esta dentro del path 1
+        if(this.mouseY >= height/2 - 25 && ( this.mouseY <= height/2 + 25 ) && this.constructing){
             context.save();
             context.beginPath();
             context.globalAlpha = .5;
@@ -158,10 +174,29 @@ class PlayingScene extends Scene {
             context.closePath();
             context.restore();
         }
+
+        //si esta dentro del path 2
+        if(this.mouseY >= height/2 + 53 && ( this.mouseY <= height/2 + 103 ) && this.constructing){
+            context.save();
+            context.beginPath();
+            context.globalAlpha = .5;
+            //si no hay una torre, visualiza la torre
+            if(!this.statustorres[Math.floor(this.mouseX/50)]){
+                context.drawImage(this.catWarlocksprite,this.previewAsset[0][0],this.previewAsset[0][1],30,35,50*(Math.floor((this.mouseX)/50)) ,height/2+53,50,50);
+            }
+            context.closePath();
+            context.restore();
+        }
+
+
         //dibuja a los enemigos vivos
         for(let x = 0; x < this.enemigos.length; x++){
-            if(this.statusenemigos[x]== true)
-                this.enemigos[x].render();
+            if(this.statusenemigos[x]== true){
+
+          
+            this.enemigos[x].render();
+            
+         
         }
         //dibuja las torres vivas
         for(let x = 0; x < 24; x++){
@@ -258,6 +293,7 @@ class PlayingScene extends Scene {
                             break;
                     }
                 }
+
                 this.ticks = 0;
             }
             this.ticks++;
@@ -542,7 +578,7 @@ class PlayingScene extends Scene {
             this.constructing = false;
             this.buttonColor = "gray";
         }
-        //checa si esta en el path
+        //checa si esta en el path 1
         if(this.mouseY >= height/2 -25 && ( this.mouseY <= height/2 + 25 ) && this.constructing){
                 //si no habia una torre en la posicion seleccionada
                 if(!this.statustorres[Math.floor(this.mouseX/50)]){
@@ -555,6 +591,21 @@ class PlayingScene extends Scene {
                     this.buttonColor = "gray";
                 }
         }
+
+         //checa si esta en el path 2
+        if(this.mouseY >= height/2 + 53 && ( this.mouseY <= height/2 + 104 ) && this.constructing){
+            //si no habia una torre en la posicion seleccionada
+            if(!this.statustorres[Math.floor(this.mouseX/50)]){
+                //construye la torre
+                this.statustorres[Math.floor(this.mouseX/50)] = true;
+                this.torres[Math.floor(this.mouseX/50)] = new CatWarlock(Math.floor(this.mouseX/50) * 50, height/2 + 53);
+                //indica al juego que deje de construir, que el boton lo indique y entre en cooldown
+                this.constructing = false;
+                this.constructionTimer = 240;
+                this.buttonColor = "gray";
+            }
+        }
+
         //Si el juego esta en pausa
         if(this.paused){
             //interactua con los botones del menu de pausa
