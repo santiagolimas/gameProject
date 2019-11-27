@@ -10,9 +10,27 @@ import backgroundCreditsMusic from "./assets/Caketown 1.mp3"
 class CreditsScene extends Scene {
 
     private currentOption: number = 0
-    private options = ["Menu selection click, credits to NenadSimic","Catching fire, credits to themightyglider",
-                        "Cat fighter, credits to dogchicken", "Skull monster, credits to dogchiken"]
+    private options = ["Sprites:",
+                        "Catching fire, credits to themightyglider",
+                        "Cat fighter, credits to dogchicken", 
+                        "Skull monster, credits to dogchiken",
+                        "Animated Snake, credits to Calciumtrice",
+                        "Minotaur,, credits to Elthen",
+                        "Background Images:",
+                        "Forest backgrounds, credtis to Tamara Ramsay",
+                        "Blood stained wall, credits to plemuzic",
+                        "Backgrounds for battle, credits to Nidhoggn",
+                        "Music:",
+                        "Menu selection click, credits to NenadSimic",
+                        "Awesomeness, credits to mrpoly",
+                        "The Last Encounter (Digitalized Version), credits to Matthew Pablo",
+                        "Caketown, credits to Matthew Pablo",
+                        "The Dark Amulet, credits to Matthew Pablo",
+                        "Awake10_megaWall, credist to cynicmusic"
+                    ]
+                        
     private mousePressed = false;
+
     private buttons = [[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2-160]
                       ,[GameContext.context.canvas.width/2 -200,GameContext.context.canvas.height/2+60]]
 
@@ -37,7 +55,7 @@ class CreditsScene extends Scene {
          context.restore();
 
         context.save()
-        context.font = "50px sans-serif"
+        context.font = "45px sans-serif"
         context.fillStyle = "black"
         context.textAlign = "center"
         context.lineWidth = 1.8;
@@ -48,10 +66,10 @@ class CreditsScene extends Scene {
         for(let i = 0;  i < this.options.length ; i++){
             context.fillStyle = "black";
             context.textAlign = "center";
-            context.font = "40px sans-serif"
+            context.font = "30px sans-serif"
             context.strokeStyle = "grey"
             context.lineWidth = 1.8;
-            context.fillText(this.options[i], width / 2, height / 2 + i * 110 - 100);
+            context.fillText(this.options[i], width / 2, height / 2 + i * 26 - 195);
         }
         context.restore()
 
