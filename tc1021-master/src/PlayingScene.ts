@@ -14,6 +14,7 @@ import GameOverScene from "./GameOverScene"
 import CreditsScene from "./CreditsScene"
 import Minotauro from "./Minotauro"
 import Snake from "./Snake"
+// @ts-ignore
 import backgroundMenuMusic from "./assets/The Last Encounter (Digitalized Version).mp3"
 
 // @ts-ignore
@@ -191,12 +192,8 @@ class PlayingScene extends Scene {
 
         //dibuja a los enemigos vivos
         for(let x = 0; x < this.enemigos.length; x++){
-            if(this.statusenemigos[x]== true){
-
-          
-            this.enemigos[x].render();
-            
-         
+            if(this.statusenemigos[x]== true)
+                this.enemigos[x].render();
         }
         //dibuja las torres vivas
         for(let x = 0; x < 24; x++){
@@ -249,6 +246,9 @@ class PlayingScene extends Scene {
     }
 
     public update = (engine: Engine) => {
+        if(this.backgroundMusic.volume <= .995){
+            this.backgroundMusic.volume += .005;
+        }
         //constantes
         const context = GameContext.context;
         const width = context.canvas.width;
@@ -406,6 +406,7 @@ class PlayingScene extends Scene {
         const height = context.canvas.height;
         //inicializa el sprite del boton creador
         this.catWarlocksprite.src = CatWarlockSprite;
+        this.backgroundMusic.volume = 0.15;
         //inicializa los arreglos de las torres
         for(let x = 0; x < 24; x++){
             this.torres.push(new CatWarlock(x*50,0));
@@ -487,9 +488,11 @@ class PlayingScene extends Scene {
                             break;
                         case 2:
                                 engine.setCurrentScene(new MainMenuScene());
-                        break;
+                            break;
+                        case 3:
+                                engine.setCurrentScene(new CreditsScene());
+                            break;
                     }
-                    break;
             }
          }
     }

@@ -2,13 +2,15 @@ import Scene from "./Scene"
 import GameContext from "./GameContext"
 import Engine from "./Engine"
 import PlayingScene from "./PlayingScene"
+import CreditsScene from "./CreditsScene"
 import MainMenuScene from "./MainMenuScene"
 // @ts-ignore
 import Skull from "./assets/mon2_sprite_base.png"
 // @ts-ignore
 import selection from "./assets/Menu Selection Click.wav"
-
+// @ts-ignore
 import backgroundGameOverMusic from "./assets/The Dark Amulet.mp3"
+// @ts-ignore
 import gameOverBackground from "./assets/BG/gameOver2.png"
 
 
@@ -127,6 +129,10 @@ class GameOverScene extends Scene {
                 if(this.currentOption === 0){
                     this.backgroundSound.pause();
                     engine.setCurrentScene(new PlayingScene());
+                }
+                if(this.currentOption === 1){
+                    this.backgroundSound.pause();
+                    engine.setCurrentScene(new MainMenuScene());
                 }
                 
                 break;
