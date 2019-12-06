@@ -2,7 +2,6 @@ import Scene from "./Scene"
 import GameContext from "./GameContext"
 import Engine from "./Engine"
 import PlayingScene from "./PlayingScene"
-import SegundaPlayingScene from "./SegundaPlayingScene"
 import VictoryScene from "./VictoryScene"
 import GameOverScene from "./GameOverScene"
 // @ts-ignore
@@ -104,7 +103,7 @@ class MainMenuScene extends Scene {
             case "Enter":
                 if(this.currentOption === 0){
                     this.backgroundSound.pause()
-                    engine.setCurrentScene(new SegundaPlayingScene());
+                    engine.setCurrentScene(new PlayingScene());
 
                 }
                 if(this.currentOption === 1){
