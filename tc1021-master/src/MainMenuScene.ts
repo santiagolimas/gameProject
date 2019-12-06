@@ -6,9 +6,10 @@ import VictoryScene from "./VictoryScene"
 import GameOverScene from "./GameOverScene"
 // @ts-ignore
 import selection from "./assets/Menu Selection Click.wav"
+// @ts-ignore
 import backgroundMusic from "./assets/menuPrincipal_music2.wav"
 import CreditsScene from "./CreditsScene"
-
+// @ts-ignore
 import menuBackground from "./assets/BG/menuBackground.png"
 
 class MainMenuScene extends Scene {

@@ -56,7 +56,7 @@ class Zombie{
         }
     }
 
-    constructor(){
+    constructor(y: number){
         //constantes del canvas
         const context = GameContext.context;
         const height = context.canvas.height;
@@ -66,17 +66,7 @@ class Zombie{
         this.vidaRestante = 500;
         //se inicializa en donde va a hacer spawn
         this.coordX = width;
-
-        let rand = Math.floor(Math.random()*2) + 1;
-
-        if(rand === 1){
-            this.firstPath = true;
-            this.coordY = (height / 2) - 25;
-
-        }else{
-            this.firstPath = false;
-            this.coordY = (height / 2) + 53;
-        }
+        this.coordY = y;
         //su primera animacion es caminar
         this.frame = 0;
         this.stance = 0;
@@ -169,12 +159,6 @@ class Zombie{
         const context = GameContext.context;
         const height = context.canvas.height;
         const width = context.canvas.width;
-
-        if(this.firstPath){
-            this.pos = 25;
-        }else{
-            this.pos = -53;
-        }
         //si la cantidad de frames que debe de mostrar la salud es existente
         if(this.HealthCounter > 0){
             //dibuja una barra roja que representa toda la vida que se puede tener
@@ -197,7 +181,7 @@ class Zombie{
             //dibuja la animacion de caminar
             context.save();
             context.beginPath();
-            context.translate(this.coordX + 50,height/2 - this.pos);
+            context.translate(this.coordX + 50,this.coordY);
             context.scale(-1,1);
             context.drawImage(this.sprite,this.walkingframes[this.frame][0],this.walkingframes[this.frame][1],27, 42,0,0, 50, 50)
             context.closePath();
@@ -208,7 +192,7 @@ class Zombie{
             //dibuja la animacion de atacar
             context.save();
             context.beginPath();
-            context.translate(this.coordX + 50,height/2 - this.pos);
+            context.translate(this.coordX + 50,this.coordY);
             context.scale(-1,1);
             context.drawImage(this.sprite,this.attackingframes[this.frame][0],this.attackingframes[this.frame][1],32, 41,0,0, 50, 50)
             context.closePath();
@@ -219,7 +203,7 @@ class Zombie{
             //dibuja la animacion de morir
             context.save();
             context.beginPath();
-            context.translate(this.coordX + 50,height/2 - this.pos);
+            context.translate(this.coordX + 50,this.coordY);
             context.scale(-1,1);
             context.drawImage(this.sprite,this.dyingframes[this.frame][0],this.dyingframes[this.frame][1],40, 45,0,0, 50, 50)
             context.closePath();
@@ -230,7 +214,7 @@ class Zombie{
             //dibuja la animacion de esperar
             context.save();
             context.beginPath();
-            context.translate(this.coordX + 50,height/2 - this.pos);
+            context.translate(this.coordX + 50,this.coordY);
             context.scale(-1,1);
             context.drawImage(this.sprite,this.waitingframe[0],this.waitingframe[1],28, 42,0,0, 50, 50)
             context.closePath();

@@ -59,13 +59,21 @@ class PlayingScene extends Scene {
     private paused = false
     private direccion = 1;
     private ticks = 0;
+    private ticks2 = 0;
     //enemigos
-    private enemigos = [new Zombie(),new Zombie(),new Zombie(),new Zombie(),new Zombie()];
+    private enemigos = [new Zombie(0),new Zombie(0),new Zombie(0),new Zombie(0),new Zombie(0)];
     private statusenemigos = [false,false,false,false,false];
     private tipoenemigo =[0,0,0,0,0];
+
+    private enemigos2 = [new Zombie(0),new Zombie(0),new Zombie(0),new Zombie(0),new Zombie(0)];
+    private statusenemigos2 = [false,false,false,false,false];
+    private tipoenemigo2 =[0,0,0,0,0];
     //torres
     private torres: CatWarlock[] = [];
     private statustorres = [];
+
+    private torres2: CatWarlock[] = [];
+    private statustorres2 = [];
     //assets
     private selectionSound = new Audio(selection);
     private playSound = false
@@ -159,7 +167,7 @@ class PlayingScene extends Scene {
         context.beginPath();
         context.fillStyle = "black";
         context.globalAlpha = .8;
-        context.fillRect(x,y,this.widthButton, this.heightButton*(this.constructionTimer/240));
+        context.fillRect(x,y,this.widthButton, this.heightButton*(this.constructionTimer/480));
         context.closePath();
         context.restore();
 
@@ -182,7 +190,7 @@ class PlayingScene extends Scene {
             context.beginPath();
             context.globalAlpha = .5;
             //si no hay una torre, visualiza la torre
-            if(!this.statustorres[Math.floor(this.mouseX/50)]){
+            if(!this.statustorres2[Math.floor(this.mouseX/50)]){
                 context.drawImage(this.catWarlocksprite,this.previewAsset[0][0],this.previewAsset[0][1],30,35,50*(Math.floor((this.mouseX)/50)) ,height/2+53,50,50);
             }
             context.closePath();
@@ -195,10 +203,19 @@ class PlayingScene extends Scene {
             if(this.statusenemigos[x]== true)
                 this.enemigos[x].render();
         }
+        for(let x = 0; x < this.enemigos2.length; x++){
+            if(this.statusenemigos2[x]== true)
+                this.enemigos2[x].render();
+        }
         //dibuja las torres vivas
         for(let x = 0; x < 24; x++){
             if(this.statustorres[x]){
                 this.torres[x].render();
+            }
+        }
+        for(let x = 0; x < 24; x++){
+            if(this.statustorres2[x]){
+                this.torres2[x].render();
             }
         }
 
@@ -265,6 +282,7 @@ class PlayingScene extends Scene {
 
             //genera los enemigos en un intervalo aleatorio entre 200 y 800 ticks
             let rand = Math.ceil(Math.random()*600) + 200;
+            const height = context.canvas.height;
             //si es en el intervalo aleatorio o supero el parametro superior genera un enemigo
             if(this.ticks == rand || this.ticks > 800){
                 let y = -1;
@@ -283,13 +301,13 @@ class PlayingScene extends Scene {
                     this.tipoenemigo[y] = tipo;
                     switch(tipo){
                         case 1:
-                            this.enemigos[y] = new Zombie();
+                            this.enemigos[y] = new Zombie(height/2 - 25);
                             break;
                         case 2:
-                            this.enemigos[y] = new Minotauro();
+                            this.enemigos[y] = new Minotauro(height/2 - 25);
                             break;
                         case 3:
-                            this.enemigos[y] = new Snake();
+                            this.enemigos[y] = new Snake(height/2 - 25);
                             break;
                     }
                 }
@@ -297,6 +315,40 @@ class PlayingScene extends Scene {
                 this.ticks = 0;
             }
             this.ticks++;
+            //genera los enemigos en un intervalo aleatorio entre 200 y 800 ticks
+            let rand2 = Math.ceil(Math.random()*600) + 200;
+            //si es en el intervalo aleatorio o supero el parametro superior genera un enemigo
+            if(this.ticks2 == rand2 || this.ticks2 > 800){
+                let y = -1;
+                //este ciclo checa donde puede generar un enemigo debido a que puede haber maximo 5 en pantalla
+                for(let x = 0; x < 5;x++){
+                    if(this.statusenemigos2[x] == false && y == -1){
+                        y = x;
+                    }
+                }
+                //si hay minimo 1 enemigo disponible entra a esta condicion
+                if(y != -1){
+                    //indica que ahora existe un enemigo
+                    this.statusenemigos2[y] = true;
+                    //randomiza el tipo de enemigo
+                    let tipo = Math.ceil(Math.random()*3);
+                    this.tipoenemigo2[y] = tipo;
+                    switch(tipo){
+                        case 1:
+                            this.enemigos2[y] = new Zombie(height/2 + 53);
+                            break;
+                        case 2:
+                            this.enemigos2[y] = new Minotauro(height/2 + 53);
+                            break;
+                        case 3:
+                            this.enemigos2[y] = new Snake(height/2 + 53);
+                            break;
+                    }
+                }
+
+                this.ticks2 = 0;
+            }
+            this.ticks2++;
             //altera el cooldown de construir una torre
             if(this.constructionTimer>0){
                 this.constructionTimer--;
@@ -321,10 +373,35 @@ class PlayingScene extends Scene {
                     }
                 }
             }
+            for(let x = 0; x < this.enemigos2.length; x++){
+                //primero checa si el juego cree que un enemigo esta vivo
+                if(this.statusenemigos2[x] == true){
+                    //verifica si el enemigo cree que esta vivo
+                    this.statusenemigos2[x] = this.enemigos2[x].getStatus();
+                    //si ambos estan de acuerdo significa que el enemigo sigue vivo
+                    if(this.statusenemigos2[x] ==true){
+                        this.enemigos2[x].update();
+                        //si cruzo el lado izquierdo el jugador pierde
+                        if(this.enemigos2[x].getEnemyCoordinates()[0] <= 0){
+                            this.backgroundMusic.pause()
+                            engine.setCurrentScene(new GameOverScene());
+                        }
+                    }
+                    //si el enemigo se cree muerto es porque murio en el ultimo update
+                    else{
+                        this.deadEnemies++;
+                    }
+                }
+            }
             //hace un update de todas las torres
             for(let x = 0; x < 24; x++){
                 if(this.statustorres[x]){
                     this.torres[x].update(this.enemigos,this.statusenemigos);
+                }
+            }
+            for(let x = 0; x < 24; x++){
+                if(this.statustorres2[x]){
+                    this.torres2[x].update(this.enemigos2,this.statusenemigos2);
                 }
             }
            //Colision entre enemigos y torres
@@ -395,6 +472,73 @@ class PlayingScene extends Scene {
                     }
                 }
             }
+            for(let i = 0; i < this.torres2.length;i++){
+                for(let j = 0; j < this.enemigos2.length; j++){
+                    
+                    let [torreX, torreY] = this.torres2[i].getCatWarlockCoordinates();
+                    let [torreWidth, torreHeight] = this.torres2[i].getMeasurementsCatWarlock();
+    
+                    let [enemyX, enemyY] = this.enemigos2[j].getEnemyCoordinates();
+                    let [enemyWidth,enemyHeight] = this.enemigos2[j].getMeasurementsEnemy();
+    
+                    // TODO Torre
+                    //Izq
+                    let leftA = torreX;
+                    //Derecho
+                    let rightA = torreX + torreWidth;
+                    //Top
+                    let topA = torreY;
+                    //Bottom
+                    let bottomA = torreY + torreHeight;
+    
+                    // TODO Enemy
+                    //Izq
+                    let leftB = enemyX;
+                    //Derecho
+                    let rightB = enemyX + enemyWidth;
+                    //Top
+                    let topB = enemyY;
+                    //Bottom
+                    let bottomB = enemyY + enemyHeight;
+    
+    
+                    if(leftA < rightB && rightA > leftB &&
+                        topA < bottomB && bottomA > topB && this.statustorres2[i] && this.statusenemigos2[j]){
+                            //indica a la torre contra que enemigo esta colisionando
+                            this.torres2[i].collisionTorre(this.tipoenemigo2[j]);
+                            //avisa al enemigo que ataque
+                            this.enemigos2[j].collisionTorre();
+                            //si la torre murio indica al enemigo que camine
+                            if(this.torres2[i].getStatus() == false){
+                                this.enemigos2[j].walk(1);
+                            }
+                            //checa si el enemigo esta atacando a una torre viva
+                            this.statustorres2[i] = this.torres2[i].getStatus();
+                            //si el enemigo esta atacando una torre muerta
+                            if(this.statustorres2[i] == false){
+                                for(let x = 0; x < this.enemigos2.length; x++){
+                                    let [enemyX, enemyY] = this.enemigos2[x].getEnemyCoordinates();
+                                    let [enemyWidth,enemyHeight] = this.enemigos2[x].getMeasurementsEnemy();
+                                    // TODO Enemy
+                                    //Izq
+                                    let leftB = enemyX;
+                                    //Derecho
+                                    let rightB = enemyX + enemyWidth;
+                                    //Top
+                                    let topB = enemyY;
+                                    //Bottom
+                                    let bottomB = enemyY + enemyHeight;
+                                    if(leftA < rightB && rightA > leftB &&
+                                        topA < bottomB && bottomA > topB&& this.statusenemigos2[x]){
+                                            //indica a los enemigos que se desfazen
+                                            this.enemigos2[x].walk(x*100 + 1)
+                                        }
+                                }
+                            }
+    
+                        }
+                    }
+                }
         }
         
     }
@@ -411,6 +555,8 @@ class PlayingScene extends Scene {
         for(let x = 0; x < 24; x++){
             this.torres.push(new CatWarlock(x*50,0));
             this.statustorres.push(false);
+            this.torres2.push(new CatWarlock(x*50,0));
+            this.statustorres2.push(false);
         }
         //selecciona un background aleatoriamente
         let bg = Math.ceil(Math.random()*10);
@@ -590,7 +736,7 @@ class PlayingScene extends Scene {
                     this.torres[Math.floor(this.mouseX/50)] = new CatWarlock(Math.floor(this.mouseX/50) * 50, height/2 - 25);
                     //indica al juego que deje de construir, que el boton lo indique y entre en cooldown
                     this.constructing = false;
-                    this.constructionTimer = 240;
+                    this.constructionTimer = 480;
                     this.buttonColor = "gray";
                 }
         }
@@ -598,13 +744,13 @@ class PlayingScene extends Scene {
          //checa si esta en el path 2
         if(this.mouseY >= height/2 + 53 && ( this.mouseY <= height/2 + 104 ) && this.constructing){
             //si no habia una torre en la posicion seleccionada
-            if(!this.statustorres[Math.floor(this.mouseX/50)]){
+            if(!this.statustorres2[Math.floor(this.mouseX/50)]){
                 //construye la torre
-                this.statustorres[Math.floor(this.mouseX/50)] = true;
-                this.torres[Math.floor(this.mouseX/50)] = new CatWarlock(Math.floor(this.mouseX/50) * 50, height/2 + 53);
+                this.statustorres2[Math.floor(this.mouseX/50)] = true;
+                this.torres2[Math.floor(this.mouseX/50)] = new CatWarlock(Math.floor(this.mouseX/50) * 50, height/2 + 53);
                 //indica al juego que deje de construir, que el boton lo indique y entre en cooldown
                 this.constructing = false;
-                this.constructionTimer = 240;
+                this.constructionTimer = 480;
                 this.buttonColor = "gray";
             }
         }

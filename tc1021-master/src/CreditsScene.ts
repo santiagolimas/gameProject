@@ -3,7 +3,9 @@ import GameContext from "./GameContext"
 import Engine from "./Engine"
 import PlayingScene from "./PlayingScene"
 import MainMenuScene from "./MainMenuScene"
+// @ts-ignore
 import creditsBackground from "./assets/BG/menuBackground.png"
+// @ts-ignore
 import backgroundCreditsMusic from "./assets/Caketown 1.mp3"
 
 

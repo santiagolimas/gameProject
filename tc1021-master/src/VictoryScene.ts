@@ -148,7 +148,7 @@ class VictoryScene extends Scene {
                     this.backgroundSound.pause();
                     engine.setCurrentScene(new PlayingScene());
                 }
-                else if(this.currentOption === 0){
+                else if(this.currentOption === 1){
                     this.backgroundSound.pause();
                     engine.setCurrentScene(new MainMenuScene());
                 }
