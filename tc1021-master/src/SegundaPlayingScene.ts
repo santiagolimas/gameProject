@@ -2,8 +2,8 @@ import Scene from "./Scene"
 import Engine from "./Engine"
 import MainMenuScene from "./MainMenuScene"
 import GameContext from "./GameContext"
-import SegundaPlayingScene from "./SegundaPlayingScene"
 import Zombie from "./Zombie"
+import PlayingScene from "./PlayingScene"
 // @ts-ignore
 import selection from "./assets/Menu Selection Click.wav"
 import CatWarlock from "./CatWarlock"
@@ -39,7 +39,7 @@ import background9 from "./assets/BG/battleback9.png"
 // @ts-ignore
 import background10 from "./assets/BG/battleback10.png"
 
-class PlayingScene extends Scene {
+class SegundaPlayingScene extends Scene {
 
     //Background music
     private backgroundMusic = new Audio(backgroundMenuMusic);
@@ -51,16 +51,17 @@ class PlayingScene extends Scene {
     private buttonColor = "gray"
     //gameplay
     private deadEnemies = 0;
-    private enemigosFaltantes = 10;
+    private enemigosFaltantes = 20;
     private constructionTimer = 0;
     private previewAsset = [[20,150]];
     private constructing = false;
     private mouseX = 0;
     private mouseY = 0;
     private paused = false
-    private direccion = 1;
     private ticks = 0;
     private ticks2 = 0;
+    private ticks3 = 0;
+    private ticks4 = 0;
     //enemigos
     private enemigos = [new Zombie(0),new Zombie(0),new Zombie(0),new Zombie(0),new Zombie(0)];
     private statusenemigos = [false,false,false,false,false];
@@ -69,12 +70,26 @@ class PlayingScene extends Scene {
     private enemigos2 = [new Zombie(0),new Zombie(0),new Zombie(0),new Zombie(0),new Zombie(0)];
     private statusenemigos2 = [false,false,false,false,false];
     private tipoenemigo2 =[0,0,0,0,0];
+
+    private enemigos3 = [new Zombie(0),new Zombie(0),new Zombie(0),new Zombie(0),new Zombie(0)];
+    private statusenemigos3 = [false,false,false,false,false];
+    private tipoenemigo3 =[0,0,0,0,0];
+
+    private enemigos4 = [new Zombie(0),new Zombie(0),new Zombie(0),new Zombie(0),new Zombie(0)];
+    private statusenemigos4 = [false,false,false,false,false];
+    private tipoenemigo4 =[0,0,0,0,0];
     //torres
     private torres: CatWarlock[] = [];
     private statustorres = [];
 
     private torres2: CatWarlock[] = [];
     private statustorres2 = [];
+
+    private torres3: CatWarlock[] = [];
+    private statustorres3 = [];
+
+    private torres4: CatWarlock[] = [];
+    private statustorres4 = [];
     //assets
     private selectionSound = new Audio(selection);
     private playSound = false
@@ -137,6 +152,24 @@ class PlayingScene extends Scene {
             context.fillRect(0, height/2 + 104, width,1)
             context.closePath();
             context.restore();
+
+             //tercer path
+             context.save();
+             context.beginPath();
+             context.fillStyle = "black";
+             context.fillRect(0, height/2 + 128, width,1)
+             context.fillRect(0, height/2 + 180, width,1)
+             context.closePath();
+             context.restore();
+
+            //cuarto path
+            context.save();
+            context.beginPath();
+            context.fillStyle = "black";
+            context.fillRect(0, height/2 - 104, width,1)
+            context.fillRect(0, height/2 - 52, width,1)
+            context.closePath();
+            context.restore();
         }
 
 
@@ -168,7 +201,7 @@ class PlayingScene extends Scene {
         context.beginPath();
         context.fillStyle = "black";
         context.globalAlpha = .8;
-        context.fillRect(x,y,this.widthButton, this.heightButton*(this.constructionTimer/480));
+        context.fillRect(x,y,this.widthButton, this.heightButton*(this.constructionTimer/230));
         context.closePath();
         context.restore();
 
@@ -198,6 +231,31 @@ class PlayingScene extends Scene {
             context.restore();
         }
 
+         //si esta dentro del path 3
+         if(this.mouseY >= height/2 + 128 && ( this.mouseY <= height/2 + 160 ) && this.constructing){
+            context.save();
+            context.beginPath();
+            context.globalAlpha = .5;
+            //si no hay una torre, visualiza la torre
+            if(!this.statustorres3[Math.floor(this.mouseX/50)]){
+                context.drawImage(this.catWarlocksprite,this.previewAsset[0][0],this.previewAsset[0][1],30,35,50*(Math.floor((this.mouseX)/50)) ,height/2+128,50,50);
+            }
+            context.closePath();
+            context.restore();
+        }
+
+         //si esta dentro del path 4
+         if(this.mouseY >= height/2 -104 && ( this.mouseY <= height/2 -52 ) && this.constructing){
+            context.save();
+            context.beginPath();
+            context.globalAlpha = .5;
+            //si no hay una torre, visualiza la torre
+            if(!this.statustorres4[Math.floor(this.mouseX/50)]){
+                context.drawImage(this.catWarlocksprite,this.previewAsset[0][0],this.previewAsset[0][1],30,35,50*(Math.floor((this.mouseX)/50)) ,height/2-104,50,50);
+            }
+            context.closePath();
+            context.restore();
+        }
 
         //dibuja a los enemigos vivos
         for(let x = 0; x < this.enemigos.length; x++){
@@ -208,6 +266,14 @@ class PlayingScene extends Scene {
             if(this.statusenemigos2[x]== true)
                 this.enemigos2[x].render();
         }
+        for(let x = 0; x < this.enemigos3.length; x++){
+            if(this.statusenemigos3[x]== true)
+                this.enemigos3[x].render();
+        }
+        for(let x = 0; x < this.enemigos4.length; x++){
+            if(this.statusenemigos4[x]== true)
+                this.enemigos4[x].render();
+        }
         //dibuja las torres vivas
         for(let x = 0; x < 24; x++){
             if(this.statustorres[x]){
@@ -217,6 +283,16 @@ class PlayingScene extends Scene {
         for(let x = 0; x < 24; x++){
             if(this.statustorres2[x]){
                 this.torres2[x].render();
+            }
+        }
+        for(let x = 0; x < 24; x++){
+            if(this.statustorres3[x]){
+                this.torres3[x].render();
+            }
+        }
+        for(let x = 0; x < 24; x++){
+            if(this.statustorres4[x]){
+                this.torres4[x].render();
             }
         }
 
@@ -278,7 +354,7 @@ class PlayingScene extends Scene {
             //si se cumplio el objetivo pasa a la siguiente escena
             if(this.deadEnemies == this.enemigosFaltantes){
                 this.backgroundMusic.pause()
-                engine.setCurrentScene(new SegundaPlayingScene())
+                engine.setCurrentScene(new VictoryScene())
             }
 
             //genera los enemigos en un intervalo aleatorio entre 200 y 800 ticks
@@ -350,6 +426,74 @@ class PlayingScene extends Scene {
                 this.ticks2 = 0;
             }
             this.ticks2++;
+            //genera los enemigos en un intervalo aleatorio entre 200 y 800 ticks
+            let rand3 = Math.ceil(Math.random()*600) + 200;
+            //si es en el intervalo aleatorio o supero el parametro superior genera un enemigo
+            if(this.ticks3 == rand3 || this.ticks3 > 800){
+                let y = -1;
+                //este ciclo checa donde puede generar un enemigo debido a que puede haber maximo 5 en pantalla
+                for(let x = 0; x < 5;x++){
+                    if(this.statusenemigos3[x] == false && y == -1){
+                        y = x;
+                    }
+                }
+                //si hay minimo 1 enemigo disponible entra a esta condicion
+                if(y != -1){
+                    //indica que ahora existe un enemigo
+                    this.statusenemigos3[y] = true;
+                    //randomiza el tipo de enemigo
+                    let tipo = Math.ceil(Math.random()*3);
+                    this.tipoenemigo3[y] = tipo;
+                    switch(tipo){
+                        case 1:
+                            this.enemigos3[y] = new Zombie(height/2 + 128);
+                            break;
+                        case 2:
+                            this.enemigos3[y] = new Minotauro(height/2 + 128);
+                            break;
+                        case 3:
+                            this.enemigos3[y] = new Snake(height/2 + 128);
+                            break;
+                    }
+                }
+
+                this.ticks3 = 0;
+            }
+            this.ticks3++;
+            //genera los enemigos en un intervalo aleatorio entre 200 y 800 ticks
+            let rand4 = Math.ceil(Math.random()*600) + 200;
+            //si es en el intervalo aleatorio o supero el parametro superior genera un enemigo
+            if(this.ticks4 == rand4 || this.ticks4 > 800){
+                let y = -1;
+                //este ciclo checa donde puede generar un enemigo debido a que puede haber maximo 5 en pantalla
+                for(let x = 0; x < 5;x++){
+                    if(this.statusenemigos4[x] == false && y == -1){
+                        y = x;
+                    }
+                }
+                //si hay minimo 1 enemigo disponible entra a esta condicion
+                if(y != -1){
+                    //indica que ahora existe un enemigo
+                    this.statusenemigos4[y] = true;
+                    //randomiza el tipo de enemigo
+                    let tipo = Math.ceil(Math.random()*3);
+                    this.tipoenemigo4[y] = tipo;
+                    switch(tipo){
+                        case 1:
+                            this.enemigos4[y] = new Zombie(height/2 -104);
+                            break;
+                        case 2:
+                            this.enemigos4[y] = new Minotauro(height/2 -104);
+                            break;
+                        case 3:
+                            this.enemigos4[y] = new Snake(height/2 -104);
+                            break;
+                    }
+                }
+
+                this.ticks4 = 0;
+            }
+            this.ticks4++;
             //altera el cooldown de construir una torre
             if(this.constructionTimer>0){
                 this.constructionTimer--;
@@ -394,6 +538,46 @@ class PlayingScene extends Scene {
                     }
                 }
             }
+            for(let x = 0; x < this.enemigos3.length; x++){
+                //primero checa si el juego cree que un enemigo esta vivo
+                if(this.statusenemigos3[x] == true){
+                    //verifica si el enemigo cree que esta vivo
+                    this.statusenemigos3[x] = this.enemigos3[x].getStatus();
+                    //si ambos estan de acuerdo significa que el enemigo sigue vivo
+                    if(this.statusenemigos3[x] ==true){
+                        this.enemigos3[x].update();
+                        //si cruzo el lado izquierdo el jugador pierde
+                        if(this.enemigos3[x].getEnemyCoordinates()[0] <= 0){
+                            this.backgroundMusic.pause()
+                            engine.setCurrentScene(new GameOverScene());
+                        }
+                    }
+                    //si el enemigo se cree muerto es porque murio en el ultimo update
+                    else{
+                        this.deadEnemies++;
+                    }
+                }
+            }
+            for(let x = 0; x < this.enemigos4.length; x++){
+                //primero checa si el juego cree que un enemigo esta vivo
+                if(this.statusenemigos4[x] == true){
+                    //verifica si el enemigo cree que esta vivo
+                    this.statusenemigos4[x] = this.enemigos4[x].getStatus();
+                    //si ambos estan de acuerdo significa que el enemigo sigue vivo
+                    if(this.statusenemigos4[x] ==true){
+                        this.enemigos4[x].update();
+                        //si cruzo el lado izquierdo el jugador pierde
+                        if(this.enemigos4[x].getEnemyCoordinates()[0] <= 0){
+                            this.backgroundMusic.pause()
+                            engine.setCurrentScene(new GameOverScene());
+                        }
+                    }
+                    //si el enemigo se cree muerto es porque murio en el ultimo update
+                    else{
+                        this.deadEnemies++;
+                    }
+                }
+            }
             //hace un update de todas las torres
             for(let x = 0; x < 24; x++){
                 if(this.statustorres[x]){
@@ -403,6 +587,16 @@ class PlayingScene extends Scene {
             for(let x = 0; x < 24; x++){
                 if(this.statustorres2[x]){
                     this.torres2[x].update(this.enemigos2,this.statusenemigos2);
+                }
+            }
+            for(let x = 0; x < 24; x++){
+                if(this.statustorres3[x]){
+                    this.torres3[x].update(this.enemigos3,this.statusenemigos3);
+                }
+            }
+            for(let x = 0; x < 24; x++){
+                if(this.statustorres4[x]){
+                    this.torres4[x].update(this.enemigos4,this.statusenemigos4);
                 }
             }
            //Colision entre enemigos y torres
@@ -540,6 +734,140 @@ class PlayingScene extends Scene {
                         }
                     }
                 }
+                for(let i = 0; i < this.torres3.length;i++){
+                    for(let j = 0; j < this.enemigos3.length; j++){
+                        
+                        let [torreX, torreY] = this.torres3[i].getCatWarlockCoordinates();
+                        let [torreWidth, torreHeight] = this.torres3[i].getMeasurementsCatWarlock();
+        
+                        let [enemyX, enemyY] = this.enemigos3[j].getEnemyCoordinates();
+                        let [enemyWidth,enemyHeight] = this.enemigos3[j].getMeasurementsEnemy();
+        
+                        // TODO Torre
+                        //Izq
+                        let leftA = torreX;
+                        //Derecho
+                        let rightA = torreX + torreWidth;
+                        //Top
+                        let topA = torreY;
+                        //Bottom
+                        let bottomA = torreY + torreHeight;
+        
+                        // TODO Enemy
+                        //Izq
+                        let leftB = enemyX;
+                        //Derecho
+                        let rightB = enemyX + enemyWidth;
+                        //Top
+                        let topB = enemyY;
+                        //Bottom
+                        let bottomB = enemyY + enemyHeight;
+        
+        
+                        if(leftA < rightB && rightA > leftB &&
+                            topA < bottomB && bottomA > topB && this.statustorres3[i] && this.statusenemigos3[j]){
+                                //indica a la torre contra que enemigo esta colisionando
+                                this.torres3[i].collisionTorre(this.tipoenemigo3[j]);
+                                //avisa al enemigo que ataque
+                                this.enemigos3[j].collisionTorre();
+                                //si la torre murio indica al enemigo que camine
+                                if(this.torres3[i].getStatus() == false){
+                                    this.enemigos3[j].walk(1);
+                                }
+                                //checa si el enemigo esta atacando a una torre viva
+                                this.statustorres3[i] = this.torres3[i].getStatus();
+                                //si el enemigo esta atacando una torre muerta
+                                if(this.statustorres3[i] == false){
+                                    for(let x = 0; x < this.enemigos3.length; x++){
+                                        let [enemyX, enemyY] = this.enemigos3[x].getEnemyCoordinates();
+                                        let [enemyWidth,enemyHeight] = this.enemigos3[x].getMeasurementsEnemy();
+                                        // TODO Enemy
+                                        //Izq
+                                        let leftB = enemyX;
+                                        //Derecho
+                                        let rightB = enemyX + enemyWidth;
+                                        //Top
+                                        let topB = enemyY;
+                                        //Bottom
+                                        let bottomB = enemyY + enemyHeight;
+                                        if(leftA < rightB && rightA > leftB &&
+                                            topA < bottomB && bottomA > topB&& this.statusenemigos3[x]){
+                                                //indica a los enemigos que se desfazen
+                                                this.enemigos3[x].walk(x*100 + 1)
+                                            }
+                                    }
+                                }
+        
+                            }
+                        }
+                    }
+                    for(let i = 0; i < this.torres4.length;i++){
+                        for(let j = 0; j < this.enemigos4.length; j++){
+                            
+                            let [torreX, torreY] = this.torres4[i].getCatWarlockCoordinates();
+                            let [torreWidth, torreHeight] = this.torres4[i].getMeasurementsCatWarlock();
+            
+                            let [enemyX, enemyY] = this.enemigos4[j].getEnemyCoordinates();
+                            let [enemyWidth,enemyHeight] = this.enemigos4[j].getMeasurementsEnemy();
+            
+                            // TODO Torre
+                            //Izq
+                            let leftA = torreX;
+                            //Derecho
+                            let rightA = torreX + torreWidth;
+                            //Top
+                            let topA = torreY;
+                            //Bottom
+                            let bottomA = torreY + torreHeight;
+            
+                            // TODO Enemy
+                            //Izq
+                            let leftB = enemyX;
+                            //Derecho
+                            let rightB = enemyX + enemyWidth;
+                            //Top
+                            let topB = enemyY;
+                            //Bottom
+                            let bottomB = enemyY + enemyHeight;
+            
+            
+                            if(leftA < rightB && rightA > leftB &&
+                                topA < bottomB && bottomA > topB && this.statustorres4[i] && this.statusenemigos4[j]){
+                                    //indica a la torre contra que enemigo esta colisionando
+                                    this.torres4[i].collisionTorre(this.tipoenemigo4[j]);
+                                    //avisa al enemigo que ataque
+                                    this.enemigos4[j].collisionTorre();
+                                    //si la torre murio indica al enemigo que camine
+                                    if(this.torres4[i].getStatus() == false){
+                                        this.enemigos4[j].walk(1);
+                                    }
+                                    //checa si el enemigo esta atacando a una torre viva
+                                    this.statustorres4[i] = this.torres4[i].getStatus();
+                                    //si el enemigo esta atacando una torre muerta
+                                    if(this.statustorres4[i] == false){
+                                        for(let x = 0; x < this.enemigos4.length; x++){
+                                            let [enemyX, enemyY] = this.enemigos4[x].getEnemyCoordinates();
+                                            let [enemyWidth,enemyHeight] = this.enemigos4[x].getMeasurementsEnemy();
+                                            // TODO Enemy
+                                            //Izq
+                                            let leftB = enemyX;
+                                            //Derecho
+                                            let rightB = enemyX + enemyWidth;
+                                            //Top
+                                            let topB = enemyY;
+                                            //Bottom
+                                            let bottomB = enemyY + enemyHeight;
+                                            if(leftA < rightB && rightA > leftB &&
+                                                topA < bottomB && bottomA > topB&& this.statusenemigos4[x]){
+                                                    //indica a los enemigos que se desfazen
+                                                    this.enemigos4[x].walk(x*100 + 1)
+                                                }
+                                        }
+                                    }
+            
+                                }
+                            }
+                        }
         }
         
     }
@@ -558,27 +886,25 @@ class PlayingScene extends Scene {
             this.statustorres.push(false);
             this.torres2.push(new CatWarlock(x*50,0));
             this.statustorres2.push(false);
+            this.torres3.push(new CatWarlock(x*50,0));
+            this.statustorres3.push(false);
+            this.torres4.push(new CatWarlock(x*50,0));
+            this.statustorres4.push(false);
         }
         //selecciona un background aleatoriamente
-        let bg = Math.ceil(Math.random()*6);
+        let bg = Math.ceil(Math.random()*4);
         switch(bg){
             case 1:
-                this.background.src = background1;
+                this.background.src = background2;
                 break;
             case 2:
-                this.background.src = background4;
+                this.background.src = background3;
                 break;
             case 3:
-                this.background.src = background6;
+                this.background.src = background7;
                 break;
             case 4:
-                this.background.src = background8;
-                break;
-            case 5:
-                this.background.src = background9;
-                break;
-            case 6:
-                this.background.src = background10;
+                this.background.src = background5;
                 break;
         }
     }
@@ -725,7 +1051,7 @@ class PlayingScene extends Scene {
                     this.torres[Math.floor(this.mouseX/50)] = new CatWarlock(Math.floor(this.mouseX/50) * 50, height/2 - 25);
                     //indica al juego que deje de construir, que el boton lo indique y entre en cooldown
                     this.constructing = false;
-                    this.constructionTimer = 480;
+                    this.constructionTimer = 230;
                     this.buttonColor = "gray";
                 }
         }
@@ -739,7 +1065,33 @@ class PlayingScene extends Scene {
                 this.torres2[Math.floor(this.mouseX/50)] = new CatWarlock(Math.floor(this.mouseX/50) * 50, height/2 + 53);
                 //indica al juego que deje de construir, que el boton lo indique y entre en cooldown
                 this.constructing = false;
-                this.constructionTimer = 480;
+                this.constructionTimer = 230;
+                this.buttonColor = "gray";
+            }
+        }
+        //checa si esta en el path 3
+        if(this.mouseY >= height/2 + 128 && ( this.mouseY <= height/2 + 160 ) && this.constructing){
+            //si no habia una torre en la posicion seleccionada
+            if(!this.statustorres3[Math.floor(this.mouseX/50)]){
+                //construye la torre
+                this.statustorres3[Math.floor(this.mouseX/50)] = true;
+                this.torres3[Math.floor(this.mouseX/50)] = new CatWarlock(Math.floor(this.mouseX/50) * 50, height/2 + 128);
+                //indica al juego que deje de construir, que el boton lo indique y entre en cooldown
+                this.constructing = false;
+                this.constructionTimer = 230;
+                this.buttonColor = "gray";
+            }
+        }
+        //checa si esta en el path 2
+        if(this.mouseY >= height/2 -104 && ( this.mouseY <= height/2 -52 ) && this.constructing){
+            //si no habia una torre en la posicion seleccionada
+            if(!this.statustorres4[Math.floor(this.mouseX/50)]){
+                //construye la torre
+                this.statustorres4[Math.floor(this.mouseX/50)] = true;
+                this.torres4[Math.floor(this.mouseX/50)] = new CatWarlock(Math.floor(this.mouseX/50) * 50, height/2 -104);
+                //indica al juego que deje de construir, que el boton lo indique y entre en cooldown
+                this.constructing = false;
+                this.constructionTimer = 230;
                 this.buttonColor = "gray";
             }
         }
@@ -776,4 +1128,4 @@ class PlayingScene extends Scene {
         }
     }
 }
-export default PlayingScene;
+export default SegundaPlayingScene;
